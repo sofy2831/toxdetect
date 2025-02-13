@@ -1,0 +1,188 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+    background-color: #f4f4f9; /* Couleur de fond claire */
+}
+
+h1 {
+    color: #333; /* Titre en gris foncé */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.question {
+    margin: 15px 0;
+}
+
+label {
+    font-size: 16px;
+    margin-right: 20px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Styles pour les boutons */
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007BFF; /* Bleu clair */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* Bleu foncé au survol */
+}
+
+button:focus {
+    outline: none; /* Retirer le contour bleu lors du focus */
+}
+
+/* Résultat du quiz */
+.result-message.eleve {
+    color: red;
+}
+
+.result-message.modere {
+    color: yellow;
+}
+
+.result-message.faible {
+    color: green;
+}
+#result {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Bouton retour */
+button#return-home {
+    background-color: #28a745; /* Vert clair */
+    color: white;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+button#return-home:hover {
+    background-color: #218838; /* Vert foncé au survol */
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    max-width: 1000px; /* Limite la largeur de la page */
+    margin: 0 auto; /* Centre la page */
+}
+forced-colors-adjust auto
+    /* Styles pour le mode contraste forcé */
+    body {
+        background-color: black; /* Par exemple, fond noir */
+        color: white; /* Texte en blanc */
+    }
+
+    /* Autres éléments spécifiques du site qui doivent être visibles en mode contraste élevé */
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    
+    header {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    h1, h2 {
+        font-size: 1.5rem;
+        color: #333;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #45a049;
+    }
+    #generate {
+        margin-bottom: 20px; /* Ajoute un espacement sous le bouton "Générer un fichier Word" */
+    }
+    
+    #close-section {
+        margin-top: 20px; /* Ajoute un espacement au-dessus du bouton "Fermer" */
+    }
+    .button-container {
+        display: flex;
+        flex-direction: column; /* Aligne les boutons en colonne */
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Espacement entre les boutons */
+        margin-top: 20px; /* Espace au-dessus des boutons */
+    }
+    
+    button {
+        margin: 0; /* Supprimer l'espacement par défaut des boutons */
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+    }
+    
+    .blue-button {
+        background-color: #007BFF;
+        color: white;
+    }
+    
+    .blue-button:hover {
+        background-color: #0056b3;
+    }
+    
+    .red-button {
+        background-color: #FF0000;
+        color: white;
+    }
+    
+    .red-button:hover {
+        background-color: #CC0000;
+    }
+    
