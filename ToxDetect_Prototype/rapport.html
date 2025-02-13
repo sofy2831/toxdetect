@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exporter Rapport</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script> <!-- Inclusion de JSZip -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        button {     
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .media-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .media-section {
+            width: 45%;
+        }      
+       
+       /* Ajoutez ici vos styles */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style pour la section des rapports */
+        #rapport-section {
+            margin: 20px;
+        }
+        
+        #close-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Section Exporter ZIP -->
+    <section id="rapport-section">
+        <h2>Exporter le rapport en ZIP</h2>
+        <button id="exportBtn">Exporter le rapport en ZIP</button>
+        <br><br>
+        <div id="zipLink" style="display:none;">
+            <a id="downloadLink" href="#" download="rapport.zip">Télécharger le ZIP</a>
+        </div>
+    </section>
+
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+document.getElementById('exportBtn').addEventListener('click', async function () {
+    const zip = new JSZip();
+    
+    // Fonction pour récupérer les fichiers d'un Object Store
+    async function fetchData(dbName, storeName, folderPath) {
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open(dbName);
+
+            dbRequest.onsuccess = function (event) {
+                const db = event.target.result;
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+
+                request.onsuccess = function (event) {
+                    const files = event.target.result;
+                    
+                    if (files.length === 0) {
+                        console.log(`Aucun fichier trouvé dans ${dbName}/${storeName}`);
+                        resolve();
+                        return;
+                    }
+
+                    files.forEach((file, index) => {
+    const blob = file.fileContent || file.blob || file.data; 
+
+    // Récupérer l'extension du fichier
+    let fileExtension = file.name ? file.name.split('.').pop() : ''; 
+    if (!fileExtension && file.type) {
+        fileExtension = file.type.split('/')[1]; // Exemple: "video/mp4" => "mp4"
+    }
+
+    // Nom du fichier avec extension correcte
+    const fileName = file.name || `file_${index + 1}.${fileExtension || 'bin'}`; 
+
+    zip.file(`${folderPath}/${fileName}`, blob);
+});
+
+                    resolve();
+                };
+
+                request.onerror = function () {
+                    console.error(`Erreur de récupération: ${dbName}/${storeName}`);
+                    reject();
+                };
+            };
+
+            dbRequest.onerror = function () {
+                console.error(`Impossible d'ouvrir la base de données: ${dbName}`);
+                reject();
+            };
+        });
+    }
+
+    // Ajouter chaque base de données et ses stores
+    await fetchData("VideoDB", "videos", "VideoDB");
+    await fetchData("audioDB", "audios", "audioDB");
+    await fetchData("monjournaldebordDB", "fichiersDB", "monjournaldebordDB/fichiersDB");
+    await fetchData("monjournaldebordDB", "journalDB", "monjournaldebordDB/journalDB");
+
+    // Générer le ZIP et proposer le téléchargement
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+        const blobUrl = URL.createObjectURL(content);
+        const downloadLink = document.getElementById('downloadLink');
+        downloadLink.href = blobUrl;
+        document.getElementById('zipLink').style.display = 'block';
+
+         // Affiche le lien dans la page
+         document.getElementById('zipLink').style.display = 'block';
+
+    });
+});
+</script>
+        
+      
+    </script>
+
+    <!-- Section Générer un document Word -->
+    <section id="rapport-word-section">
+        <h2>Générer un document Word</h2>
+        <button id="generateButton">fichier Word</button>
+    </section>
+
+    <script src="rapport.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
+
+    <script>
+        document.getElementById("generateButton").addEventListener("click", function() {
+            const { Document, Packer, Paragraph, TextRun } = window.docx;
+
+            // Création du document
+            const doc = new Document({
+                sections: [
+                    {
+                        properties: {},
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Bienvenue sur ToxDetect. Vous pouvez organiser vos informations de manière claire et structurée, afin de vous préparer au mieux pour toute démarche légale."),                
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Récit des faits."),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Date de l’événement : Décrire les événements, heures, lieux, personnes, ajouter d'autres informations si nécessaire telles que des témoignages, des actions entreprises, des observations, etc ........................................... (Pièce n°...) "),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Date de l’événement : ............................................................ (Pièce n°...)"),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Date de l’événement : ............................................................ (Pièce n°...)"),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("Je soussigné(e) (votre nom), déclare que les faits relatés ci-dessus sont exacts et correspondent à la réalité des événements. J'annexe à la présente les pièces justifiatives des faits. "),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun(" Fait à (lieu), le (date du jour). Votre Signature."),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("PJ :Pièce 1 : (Nommer la pièce)"),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("PJ :Pièce 2 : (Nommer la pièce)"),
+                                ],
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun("PJ :Pièce 3 : (Nommer la pièce)"),
+                                ],
+                            }),
+                        ],
+                    },
+                ],
+            });
+
+            // Convertir le document en fichier .docx et proposer le téléchargement
+            Packer.toBlob(doc).then((blob) => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "My Document.docx";
+                link.click();
+            });
+        });
+    </script>
+
+    <!-- Section Fermer -->
+    <section id="close-section">
+        <button onclick="window.location.href = 'journal.html';">Fermer</button>
+    </section>
+</body>
+</html>
