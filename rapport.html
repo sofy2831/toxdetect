@@ -99,7 +99,27 @@ document.getElementById('exportBtn').addEventListener('click', async function ()
 
                     files.forEach((file, index) => {
     const blob = file.fileContent || file.blob || file.data; 
-
+                        
+ // Si pas d'extension ou suspect, appliquer une extension correcte selon le type MIME
+    const mimeType = file.type;
+    if (mimeType.startsWith("text/")) {
+        fileExtension = "txt"; // Journal = texte brut
+    } else if (mimeType === "application/pdf") {
+        fileExtension = "pdf";
+    } else if (mimeType === "application/msword" || mimeType.startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml")) {
+        fileExtension = "docx";
+    } else if (mimeType.startsWith("application/vnd.ms-excel") || mimeType.startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml")) {
+        fileExtension = "xlsx";
+    } else if (mimeType.startsWith("message/")) {
+        fileExtension = "eml"; // Pour les emails
+    } else if (mimeType.startsWith("video/")) {
+        fileExtension = "mp4"; // Exemple pour les vidéos
+    } else if (mimeType.startsWith("audio/")) {
+        fileExtension = "mp3"; // Exemple pour l'audio
+    } else {
+        fileExtension = "bin"; // Par défaut si inconnu
+    }
+                        
     // Récupérer l'extension du fichier
     let fileExtension = file.name ? file.name.split('.').pop() : ''; 
     if (!fileExtension && file.type) {
@@ -107,7 +127,7 @@ document.getElementById('exportBtn').addEventListener('click', async function ()
     }
 
     // Nom du fichier avec extension correcte
-    const fileName = file.name || `file_${index + 1}.${fileExtension || 'bin'}`; 
+    const fileName = file.name || `file_${index + 1}.${fileExtension }`; 
 
     zip.file(`${folderPath}/${fileName}`, blob);
 });
