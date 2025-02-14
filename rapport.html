@@ -159,6 +159,7 @@ document.getElementById('exportBtn').addEventListener('click', async function ()
         const blobUrl = URL.createObjectURL(content);
         const downloadLink = document.getElementById('downloadLink');
         downloadLink.href = blobUrl;
+        downloadLink.download = "rapport.zip"; // Ajout du nom du fichier
         document.getElementById('zipLink').style.display = 'block';
 
          // Affiche le lien dans la page
@@ -166,6 +167,11 @@ document.getElementById('exportBtn').addEventListener('click', async function ()
 
     });
 });
+ 
+});
+
+
+    
 </script>
         
       
