@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <h1>Informations utiles</h1>
-    
+    <title>Informations utiles</title>
     <style>
         /* Réinitialisation des marges et paddings */
         * {
@@ -24,12 +23,12 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 20px;
+            margin: 0;
             padding: 20px;
         }
 
-        /* Sections d'urgence et d'information */
-        .emergency, .info-section {
+        /* Classe pour les encadrés blancs */
+        .box {
             width: 100%;
             max-width: 600px;
             background-color: #ffffff;
@@ -37,16 +36,6 @@
             border-radius: 5px;
             margin-top: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Mise en forme des éléments d'urgence */
-        .emergency-item {
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 14px;
         }
 
         /* Boutons */
@@ -94,26 +83,27 @@
     </style>
 </head>
 <body>
-    <div class="emergency">
-        <div class="emergency-item">
-            <h3>Numéros d'urgence</h3>
-            <ul>
-                <li>Police : 17</li>
-                <li>Samu : 15</li>
-                <li>Sourds, malentendants, aphasiques (SMS) : 114</li>
-                <li>Centres d'écoute : 3919</li>
-                <li>Signaler en ligne : <a href="https://www.service-public.fr/cmi" class="link" target="_blank">Service Public</a></li>
-            </ul>
-        </div>
-        <div class="emergency-item">
-            <h3>Organisations de soutien</h3>
-            <ul>
-                <li><a href="https://arretonslesviolences.gouv.fr/associations-de-lutte-contre-les-violences-sexistes-et-sexuelles#les_associations_nationales1" class="link" target="_blank">Associations proche de chez vous et/ou nationales</a></li>
-            </ul>
-        </div>
+    <h1>Informations utiles</h1>
+
+    <div class="box">
+        <h3>Numéros d'urgence</h3>
+        <ul>
+            <li>Police : 17</li>
+            <li>Samu : 15</li>
+            <li>Sourds, malentendants, aphasiques (SMS) : 114</li>
+            <li>Centres d'écoute : 3919</li>
+            <li>Signaler en ligne : <a href="https://www.service-public.fr/cmi" class="link" target="_blank">Service Public</a></li>
+        </ul>
     </div>
 
-    <div class="info-section">
+    <div class="box">
+        <h3>Organisations de soutien</h3>
+        <ul>
+            <li><a href="https://arretonslesviolences.gouv.fr/associations-de-lutte-contre-les-violences-sexistes-et-sexuelles#les_associations_nationales1" class="link" target="_blank">Associations proches de chez vous et/ou nationales</a></li>
+        </ul>
+    </div>
+
+    <div class="box">
         <h3>Articles recommandés sur les relations toxiques :</h3>
         <ul>
             <li><a href="https://claire-grand-psy.e-monsite.com/pages/le-pervers-narcissique-et-la-manipulation-mentale.html" class="link" target="_blank">Le pervers narcissique et la manipulation mentale</a></li>
@@ -122,7 +112,7 @@
         </ul>
     </div>
 
-    <div class="info-section">
+    <div class="box">
         <p id="conseil"><h3>Cliquez sur le bouton pour obtenir un conseil.</h3></p>
         <button id="btn-conseil">Afficher un conseil</button>
     </div>
