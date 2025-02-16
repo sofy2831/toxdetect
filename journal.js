@@ -51,7 +51,7 @@ afficherDate();
             const noteData = { texte: noteTexte, date: new Date().toLocaleString() };
             ajouterDansIndexedDB("journalDB", noteData);
             document.getElementById("journalEntry").value = ""; // Réinitialisation
-            alert("Journal enregistré avec succès !");
+            alert("Journal enregistré dans IndexedDB !");
         }
     });
 
@@ -73,7 +73,7 @@ afficherDate();
                 ajouterDansIndexedDB("fichiersDB", fichierData);
                 filesAdded++;
                 if (filesAdded === fichiers.length) {
-                    alert("Fichiers enregistrés avec succès !");
+                    alert("Fichiers enregistrés dan IndexedDB !");
                     fichierInput.value = "";
                 }
             };
