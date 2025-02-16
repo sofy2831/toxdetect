@@ -13,6 +13,7 @@
             if (accessToken) {
                 localStorage.setItem("dropbox_token", accessToken);
                 alert("Connexion réussie !");
+                window.location.href = "rapport.html";
                 
             } else {
                 alert("Erreur d'authentification");
