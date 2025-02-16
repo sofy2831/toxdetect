@@ -13,6 +13,9 @@
         #videoPlayer {
             display: block;
             margin: 0 auto;
+            width: 320px; /* Largeur réduite de la vidéo */
+            height: 240px; /* Hauteur réduite de la vidéo */
+            background-color: #000; /* Fond noir pour l'élément vidéo */
         }
         button {
             padding: 10px 20px;
@@ -30,8 +33,8 @@
     </style>
 </head>
 <body>
-    <h1>Vidéo d'Urgence</h1>
-    <video id="videoPlayer" width="640" height="480" autoplay></video>
+    <h1>Vidéo d'urgence</h1>
+    <video id="videoPlayer"  autoplay></video>
     <br>
     <button id="startRecordingBtn">Démarrer la vidéo</button>
     <button id="stopRecordingBtn" style="display:none;">Arrêter l'enregistrement</button>
