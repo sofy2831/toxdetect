@@ -12,13 +12,10 @@
 
             if (accessToken) {
                 localStorage.setItem("dropbox_token", accessToken);
-                alert("Connexion réussie ! Redirection...");
+                alert("Connexion réussie !");
                 window.location.href = "index.html"; // Retour à la page principale
             } else {
                 alert("Erreur d'authentification");
-
-                
-
             }
         }
 
@@ -27,9 +24,8 @@
 </head>
 <body>
     <h2>Authentification en cours...</h2>
-    
-
 </body>
 </html>
+
 
 
