@@ -30,69 +30,42 @@
     </style>
 
     <script>
-        const APP_KEY = "0z41GO683A6XB20"; // Clé de ton application
+        const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application
         const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auch.html"; // URL de redirection
 
-       function loginWithDropbox() {
-    const authUrl = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-    window.location.href = authUrl;
-}
-
+        function loginWithDropbox() {
+            const authUrl = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+            window.location.href = authUrl;
+        }
 
         function getDropboxAccessToken() {
             const token = localStorage.getItem("dropbox_token");
             const statusElement = document.getElementById("dropbox-status");
 
-            function logoutFromDropbox() {
-    localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
-    document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
-    alert("Vous avez été déconnecté de Dropbox.");
-}
-
-     if (token) {
+            if (token) {
                 statusElement.innerHTML = "✅ Connecté à Dropbox";
             } else {
                 statusElement.innerHTML = "❌ Non connecté à Dropbox";
             }
         }
-        async function handleAuth() {
-        const urlParams = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = urlParams.get("access_token");
-
-        if (accessToken) {
-            localStorage.setItem("dropbox_token", accessToken);
-            alert("Connexion réussie ! Redirection...");
-            window.location.href = "index.html"; // Retour à la page principale
-        } else {
-            alert("Erreur d'authentification");
-        }
-    }   
-        window.onload = checkDropboxToken;
 
         function logoutFromDropbox() {
-    localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
-    document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
-    alert("Vous avez été déconnecté de Dropbox.");
-}
+            localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
+            document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
+            alert("Vous avez été déconnecté de Dropbox.");
+        }
 
+        window.onload = getDropboxAccessToken;
     </script>
-
-
 </head>
 <body>
 
     <h2>Connexion à Dropbox</h2>
     <button id="connect-dropbox" onclick="loginWithDropbox()">Connexion à Dropbox</button>
     <p id="dropbox-status"></p>
-
     <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
 
-
-</body>
-    
-</html>
-
-    </section>
+       </section>
 
         <!-- Section Générer un document Word -->
     <section id="rapport-word-section">
