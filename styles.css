@@ -79,11 +79,13 @@ button#return-home:hover {
 }
 .container {
     display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
     justify-content: space-between;
     align-items: flex-start;
-    flex-direction: column;
+    flex-direction: 1;
     max-width: 1000px; /* Limite la largeur de la page */
-    margin: 0 auto; /* Centre la page */
+    margin: 10 auto; /* Centre la page */
+    
 }
 forced-colors-adjust auto
     /* Styles pour le mode contraste forcé */
