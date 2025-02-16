@@ -43,6 +43,12 @@
             const token = localStorage.getItem("dropbox_token");
             const statusElement = document.getElementById("dropbox-status");
 
+            function logoutFromDropbox() {
+    localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
+    document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
+    alert("Vous avez été déconnecté de Dropbox.");
+}
+
      if (token) {
                 statusElement.innerHTML = "✅ Connecté à Dropbox";
             } else {
@@ -62,6 +68,13 @@
         }
     }   
         window.onload = checkDropboxToken;
+
+        function logoutFromDropbox() {
+    localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
+    document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
+    alert("Vous avez été déconnecté de Dropbox.");
+}
+
     </script>
 
 
