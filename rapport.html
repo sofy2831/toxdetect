@@ -31,13 +31,13 @@
 
     <script>
         const APP_KEY = "0z41GO683A6XB20"; // Clé de ton application
-        const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/index.html"; // URL de redirection
+        const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auch.html"; // URL de redirection
 
-        function loginWithDropbox() {
-            const redirectUri = encodeURIComponent("https://www.dropbox.com/home/Applications/ToxDetect%20Backup.com/callback"); // Page de retour
-            const authUrl = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${redirectUri}`;
-            window.location.href = authUrl;
-        }
+       function loginWithDropbox() {
+    const authUrl = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+    window.location.href = authUrl;
+}
+
 
         function getDropboxAccessToken() {
             const token = localStorage.getItem("dropbox_token");
