@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Dropbox</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +26,7 @@
         #rapport-section {
             margin: 20px;
         }
-         #dropbox-embedder {
+        #dropbox-embedder {
             margin-top: 20px;
         }
     </style>
@@ -46,8 +45,10 @@
 
     <!-- Conteneur pour afficher le contenu de Dropbox -->
     <div id="dropbox-embedder"></div>
-    
-    <script>
+
+       </section>
+
+      <script>
         const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application
         const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html"; // URL de redirection
 
@@ -72,7 +73,8 @@
             document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
             alert("Vous avez été déconnecté de Dropbox.");
         }
-document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
+
+        document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
             const token = localStorage.getItem("dropbox_token");
             if (!token) {
                 alert("Veuillez vous connecter à Dropbox d'abord.");
@@ -87,7 +89,7 @@ document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
             });
         });
 
-    window.onload = function() {
+        window.onload = function() {
             getDropboxAccessToken();
 
             // Gestion de l'authentification après redirection
@@ -102,11 +104,10 @@ document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
                 }
             }
         };
+    </script>
 
-    
-</script>
- 
-       </section>
+       
+        </section>
 
         <!-- Section Générer un document Word -->
     <section id="rapport-word-section">
