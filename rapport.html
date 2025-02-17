@@ -49,7 +49,25 @@
     <div id="dropbox-embedder"></div>
 
        </section>
+    
+<script>
+    // Remplacez par le lien partagé que vous avez copié précédemment
+    var sharedLink = 'https://www.dropbox.com/s/EXEMPLE_DE_LIEN_PARTAGE?dl=0';
 
+    // Convertir le lien partagé pour une utilisation avec l'Embedder
+    var embedLink = sharedLink.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
+
+    // Intégrer le contenu Dropbox
+    Dropbox.embed({
+        link: embedLink,
+        container: document.getElementById('dropbox-embedder'),
+        width: '100%',
+        height: '600px'
+    });
+</script>
+
+
+    
       <script>
         const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application
         const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html"; // URL de redirection
