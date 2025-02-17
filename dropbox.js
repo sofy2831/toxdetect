@@ -1,5 +1,5 @@
 Dropbox.embed({
-    link: 'https://www.dropbox.com/s/https://www.dropbox.com/home/Applications/ToxDetect%20Backup',
+    link: '/https://www.dropbox.com/home/Applications/ToxDetect%20Backup',
     container: document.getElementById('dropbox-embedder'),
     width: '100%',
     height: '600px'
