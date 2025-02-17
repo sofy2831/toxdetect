@@ -65,6 +65,28 @@
     <p id="dropbox-status"></p>
     <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
 
+<!-- Inclure le script du Dropbox Embedder -->
+<script src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="VOTRE_APP_KEY"></script>
+
+<!-- Bouton "Ma Dropbox" -->
+<button id="ma-dropbox-btn">Ma Dropbox</button>
+
+<!-- Conteneur pour afficher le contenu de Dropbox -->
+<div id="dropbox-embedder"></div>
+
+<script>
+  document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
+    Dropbox.embed({
+      link: 'https://www.dropbox.com/home', // Lien vers le dossier ou fichier Dropbox à afficher
+      container: document.getElementById('dropbox-embedder'),
+      width: '100%',
+      height: '600px'
+    });
+  });
+</script>
+
+
+    
        </section>
 
         <!-- Section Générer un document Word -->
