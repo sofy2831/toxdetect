@@ -27,8 +27,26 @@
         #rapport-section {
             margin: 20px;
         }
+         #dropbox-embedder {
+            margin-top: 20px;
+        }
     </style>
+</head>
+<body>
+    <h2>Connexion à Dropbox</h2>
+    <button id="connect-dropbox" onclick="loginWithDropbox()">Connexion à Dropbox</button>
+    <p id="dropbox-status">❌ Non connecté à Dropbox</p>
+    <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
 
+    <!-- Inclure le script du Dropbox Embedder -->
+    <script src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="0z41GO683A6XB20"></script>
+
+    <!-- Bouton "Ma Dropbox" -->
+    <button id="ma-dropbox-btn">Ma Dropbox</button>
+
+    <!-- Conteneur pour afficher le contenu de Dropbox -->
+    <div id="dropbox-embedder"></div>
+    
     <script>
         const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application
         const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html"; // URL de redirection
@@ -54,39 +72,40 @@
             document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
             alert("Vous avez été déconnecté de Dropbox.");
         }
+document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
+            const token = localStorage.getItem("dropbox_token");
+            if (!token) {
+                alert("Veuillez vous connecter à Dropbox d'abord.");
+                return;
+            }
 
-        window.onload = getDropboxAccessToken;
-    </script>
-</head>
-<body>
+            Dropbox.embed({
+                link: 'https://www.dropbox.com/home', // Lien vers le dossier ou fichier Dropbox à afficher
+                container: document.getElementById('dropbox-embedder'),
+                width: '100%',
+                height: '600px'
+            });
+        });
 
-    <h2>Connexion à Dropbox</h2>
-    <button id="connect-dropbox" onclick="loginWithDropbox()">Connexion à Dropbox</button>
-    <p id="dropbox-status"></p>
-    <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
+    window.onload = function() {
+            getDropboxAccessToken();
 
-<!-- Inclure le script du Dropbox Embedder -->
-<script src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="VOTRE_APP_KEY"></script>
-
-<!-- Bouton "Ma Dropbox" -->
-<button id="ma-dropbox-btn">Ma Dropbox</button>
-
-<!-- Conteneur pour afficher le contenu de Dropbox -->
-<div id="dropbox-embedder"></div>
-
-<script>
-  document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
-    Dropbox.embed({
-      link: 'https://www.dropbox.com/home', // Lien vers le dossier ou fichier Dropbox à afficher
-      container: document.getElementById('dropbox-embedder'),
-      width: '100%',
-      height: '600px'
-    });
-  });
-</script>
-
+            // Gestion de l'authentification après redirection
+            const hash = window.location.hash;
+            if (hash) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+                if (accessToken) {
+                    localStorage.setItem("dropbox_token", accessToken);
+                    window.location.hash = ''; // Nettoyer le hash de l'URL
+                    getDropboxAccessToken();
+                }
+            }
+        };
 
     
+</script>
+ 
        </section>
 
         <!-- Section Générer un document Word -->
