@@ -78,7 +78,6 @@ async function exportAndUpload() {
     
 });
 
-
 document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
     Dropbox.choose({
         success: function(files) {
@@ -96,6 +95,12 @@ document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
         multiselect: true, // ou false si vous ne souhaitez permettre la sélection que d'un seul fichier
         extensions: ['.pdf', '.doc', '.docx'], // Filtrer les types de fichiers si nécessaire
     });
+});
+document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
+    // Tu code pour l'exportation ou autre logique ici
+
+    // S'il y a une erreur
+    console.error('Erreur lors de l\'exportation et du téléversement :', error);
 });
 
 
