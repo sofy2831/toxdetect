@@ -38,15 +38,17 @@
 <body>
 
     <h2>Accès à votre dossier Dropbox</h2>
-    <p>Vous pouvez consulter vos fichiers stockés en toute sécurité.</p>
+    <p>Vous pouvez consulter et gérer vos fichiers stockés en toute sécurité.</p>
 
     <div id="dropbox-container">
         <h3>Votre dossier : <span style="color:#007BFF;">ToxDetect Backup</span></h3>
         <p>Voici l'espace où seront stockés vos fichiers importants.</p>
         
-        <button id="ma-dropbox-btn">Ma Dropbox</button>
+        <button id="ma-dropbox-btn">Envoyer vers Dropbox</button>
         <button id="refresh-dropbox">Actualiser</button>
         <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
+
+        <p id="status-message" style="color: green;"></p>
         
         <div id="dropbox-embedder" style="margin-top:20px;"></div>
     </div>
@@ -55,41 +57,39 @@
         function logoutFromDropbox() {
             localStorage.removeItem("dropbox_token");
             alert("Vous avez été déconnecté de Dropbox.");
-            window.location.href = "rapport.html"; // Redirige vers la page de connexion
+            window.location.href = "rapport.html"; // Redirige vers la page précédente
         }
- function refreshDropbox() {
-        // Efface l'affichage actuel
-        document.getElementById('dropbox-embedder').innerHTML = '';
 
-        // Recharge l'affichage du dossier Dropbox
-        setTimeout(() => {
-            document.getElementById('dropbox-embedder').innerHTML = `
-                <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" width="100%" height="600px"></iframe>
-            `;
-        }, 500); // Légère pause pour éviter le clignotement
-    }
+        async function refreshDropbox() {
+            document.getElementById("status-message").textContent = "Mise à jour en cours...";
+            document.getElementById('dropbox-embedder').innerHTML = ''; 
+
+            // Recharge l'affichage Dropbox avec l'intégration officielle
+            setTimeout(() => {
+                document.getElementById('dropbox-embedder').innerHTML = `
+                    <iframe src="https://www.dropbox.com/embed/home/Applications/ToxDetect%20Backup" width="100%" height="600px" frameborder="0"></iframe>
+                `;
+                document.getElementById("status-message").textContent = "Mise à jour terminée !";
+            }, 1000); // Pause d'une seconde pour fluidifier l'affichage
+        }
 
         window.onload = function() {
             const token = localStorage.getItem("dropbox_token");
             if (!token) {
                 alert("Veuillez vous connecter à Dropbox sur la page précédente.");
-                window.location.href = "rapport.html"; // Redirection vers la page de connexion
+                window.location.href = "rapport.html"; // Redirection
                 return;
             }
 
             // Affichage du dossier Dropbox
-            document.getElementById('dropbox-embedder').innerHTML = `
-                <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" width="100%" height="600px"></iframe>
-            `;
-             // Ajout de l'événement pour le bouton Actualiser
-        document.getElementById("refresh-dropbox").addEventListener("click", refreshDropbox);
+            refreshDropbox();
+
+            // Ajout de l'événement pour le bouton Actualiser
+            document.getElementById("refresh-dropbox").addEventListener("click", refreshDropbox);
         };
     </script>
 
-</body>
-</html>
-
-<br>
-<button onclick="location.href='rapport.html'">Fermer</button>
+    <br>
+    <button onclick="location.href='rapport.html'">Fermer</button>
 </body>
 </html>
