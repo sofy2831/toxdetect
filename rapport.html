@@ -23,53 +23,26 @@
         button:hover {
             background-color: #0056b3;
         }
-        #rapport-section {
-            margin: 20px;
-        }
-        #dropbox-embedder {
+        #dropbox-status {
             margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
-</head><script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="0z41GO683A6XB20"></script>
-
-    
+</head>
 <body>
+
     <h2>Connexion à Dropbox</h2>
+    <p id="dropbox-message">Connectez-vous pour gérer vos fichiers en toute simplicité.</p>
+
     <button id="connect-dropbox" onclick="loginWithDropbox()">Connexion à Dropbox</button>
     <p id="dropbox-status">❌ Non connecté à Dropbox</p>
-    <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
+    <button id="logout-button" onclick="logoutFromDropbox()" style="display: none;">Déconnexion</button>
 
-    <!-- Inclure le script du Dropbox Embedder -->
-    <script src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="0z41GO683A6XB20"></script>
-
-    <!-- Bouton "Voir mes dossier" -->
-    <button id="ma-dropbox-btn">Ma Dropbox</button>
-     
-    <!-- Conteneur pour afficher le contenu de Dropbox -->
-    <div id="dropbox-embedder"></div>
-
-       </section>
+    <button id="ma-dropbox-btn" style="display: none;" onclick="window.location.href='dropbox.html'">Accéder à mes fichiers</button>
     
-<script>
-    // Remplacez par le lien partagé que vous avez copié précédemment
-    var sharedLink = 'https://www.dropbox.com/s/https://www.dropbox.com/home/Applications/ToxDetect%20Backup?dl=0';
-
-    // Convertir le lien partagé pour une utilisation avec l'Embedder
-    var embedLink = sharedLink.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
-
-    // Intégrer le contenu Dropbox
-    Dropbox.embed({
-        link: embedLink,
-        container: document.getElementById('dropbox-embedder'),
-        width: '100%',
-        height: '600px'
-    });
-</script>
-
-
-    
-      <script>
-        const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application
+    <script>
+        const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application Dropbox
         const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html"; // URL de redirection
 
         function loginWithDropbox() {
@@ -80,158 +53,81 @@
         function getDropboxAccessToken() {
             const token = localStorage.getItem("dropbox_token");
             const statusElement = document.getElementById("dropbox-status");
+            const logoutButton = document.getElementById("logout-button");
+            const dropboxButton = document.getElementById("ma-dropbox-btn");
 
             if (token) {
                 statusElement.innerHTML = "✅ Connecté à Dropbox";
+                logoutButton.style.display = "block";
+                dropboxButton.style.display = "block";
             } else {
                 statusElement.innerHTML = "❌ Non connecté à Dropbox";
             }
         }
 
         function logoutFromDropbox() {
-            localStorage.removeItem("dropbox_token"); // Supprime le token d'accès
-            document.getElementById("dropbox-status").innerHTML = "❌ Non connecté à Dropbox";
+            localStorage.removeItem("dropbox_token");
             alert("Vous avez été déconnecté de Dropbox.");
+            location.reload();
         }
-
-        document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
-            const token = localStorage.getItem("dropbox_token");
-            if (!token) {
-                alert("Veuillez vous connecter à Dropbox d'abord.");
-                return;
-            }
-
-            Dropbox.embed({
-                link: 'https://www.dropbox.com/home/Applications/ToxDetect%20Backup', // Lien vers le dossier ou fichier Dropbox à afficher
-                container: document.getElementById('dropbox-embedder'),
-                width: '100%',
-                height: '600px'
-            });
-        });
 
         window.onload = function() {
             getDropboxAccessToken();
 
-            // Gestion de l'authentification après redirection
+            // Récupération du token après authentification
             const hash = window.location.hash;
             if (hash) {
                 const params = new URLSearchParams(hash.substring(1));
                 const accessToken = params.get('access_token');
                 if (accessToken) {
                     localStorage.setItem("dropbox_token", accessToken);
-                    window.location.hash = ''; // Nettoyer le hash de l'URL
+                    window.location.hash = '';
                     getDropboxAccessToken();
                 }
             }
         };
     </script>
 
-       
-        </section>
+    <!-- Génération du document Word -->
+    <h2>Générer un document Word</h2>
+    <p id="message">Avant de générer votre document, prenez un instant pour structurer les faits de manière chronologique et précise. Un récit bien organisé facilite la compréhension de votre situation et renforce l'impact de votre dossier juridique.</p>
+    <ul>
+        <li><strong>Décrivez les faits dans l'ordre chronologique</strong> (du plus ancien au plus récent).</li>
+        <li><strong>Soyez précis</strong> : incluez des dates, lieux et personnes impliquées.</li>
+        <li><strong>Restez factuel</strong> : évitez les interprétations et concentrez-vous sur les événements.</li>
+        <li><strong>Mentionnez les preuves</strong> (documents, SMS, mail, écrits, témoignages, etc.).</li>
+    </ul>
+    <button id="generateButton">Créer un fichier Word</button>
 
-        <!-- Section Générer un document Word -->
-    <section id="rapport-word-section">
-        <h2>Générer un document Word</h2>
-        <button id="generateButton">fichier Word</button>
-    </section>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
-
     <script>
         document.getElementById("generateButton").addEventListener("click", function() {
             const { Document, Packer, Paragraph, TextRun } = window.docx;
 
-            // Création du document
             const doc = new Document({
                 sections: [
                     {
-                        properties: {},
                         children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Bienvenue sur ToxDetect. Vous pouvez organiser vos informations de manière claire et structurée, afin de vous préparer au mieux pour toute démarche légale."),                
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Récit des faits."),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Date de l’événement : Décrire les événements, heures, lieux, personnes, ajouter d'autres informations si nécessaire telles que des témoignages, des actions entreprises, des observations, etc ........................................... (Pièce n°...) "),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Date de l’événement : ............................................................ (Pièce n°...)"),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Date de l’événement : ............................................................ (Pièce n°...)"),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("Je soussigné(e) (votre nom), déclare que les faits relatés ci-dessus sont exacts et correspondent à la réalité des événements. J'annexe à la présente les pièces justifiatives des faits. "),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun(" Fait à (lieu), le (date du jour). Votre Signature."),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("PJ :Pièce 1 : (Nommer la pièce)"),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("PJ :Pièce 2 : (Nommer la pièce)"),
-                                ],
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun("PJ :Pièce 3 : (Nommer la pièce)"),
-                                ],
-                            }),
+                            new Paragraph({ children: [new TextRun("Bienvenue sur ToxDetect.")] }),
+                            new Paragraph({ children: [new TextRun("Récit des faits.")] }),
+                            new Paragraph({ children: [new TextRun("Date de l’événement : (Pièce n°...)")] }),
+                            new Paragraph({ children: [new TextRun("Signature :")] }),
+                            new Paragraph({ children: [new TextRun("P.S: Indiquer le nom des pièces (Pièces n°...) :")] }),
+                            
                         ],
                     },
                 ],
             });
 
-            // Convertir le document en fichier .docx et proposer le téléchargement
             Packer.toBlob(doc).then((blob) => {
                 const link = document.createElement("a");
                 link.href = URL.createObjectURL(blob);
-                link.download = "My Document.docx";
+                link.download = "rapport.docx";
                 link.click();
             });
         });
-
-        
-        const DROPBOX_APP_KEY = "0z41go683a6xb20";
-        const DROPBOX_APP_SECRET = "ixj3t5uj5qukg2b";
-
-        async function handleAuth() {
-            const dbx = new Dropbox.Dropbox({ clientId: DROPBOX_APP_KEY });
-            const urlParams = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = urlParams.get("access_token");
-
-            if (accessToken) {
-                localStorage.setItem("dropbox_token", accessToken);
-                window.location.href = "/";
-            }
-        }
-        handleAuth();
     </script>
- <!-- Section Fermer -->
-    <section id="close-section">
-        <button onclick="window.location.href='journal.html'">Fermer</button>
-    </section>
-                 
+<br>
+<button onclick="location.href='journal.html'">Fermer</button>
 </body>
 </html>
