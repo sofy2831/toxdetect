@@ -1,5 +1,5 @@
 document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
-    const lienDropboxPublic = "https://www.dropbox.com/home/Applications/ToxDetect%20Backup"; // Remplace par ton lien public réel
+    const lienDropboxPublic = "https://www.dropbox.com/scl/fo/gzukndtwpovx8liih3lhw/AAHo_ee3Nj7Fbe7tlCrw2tk?rlkey=erhmjf9qtn5pjoboajr26azd6&st=s26i5gb3&dl=0"; // Remplace par ton lien public réel
     document.getElementById('dropbox-embedder').innerHTML = `
         <iframe src="${lienDropboxPublic}" width="100%" height="600px"></iframe>
     `;
