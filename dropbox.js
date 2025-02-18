@@ -1,21 +1,18 @@
 document.getElementById('ma-dropbox-btn').addEventListener('click', async function() {
-    console.log("Bouton Ma Dropbox cliqué.");
-    
-    // Vérifier si l'utilisateur est connecté à Dropbox
     const token = localStorage.getItem("dropbox_token");
     if (!token) {
-        alert("Veuillez vous connecter à Dropbox d'abord.");
+        alert("Veuillez vous connecter à Dropbox.");
         return;
     }
 
-    // Récupérer les fichiers enregistrés dans IndexedDB
+    // Récupérer les fichiers depuis IndexedDB
     const fichiers = await recupererFichiersDepuisIndexedDB();
     if (fichiers.length === 0) {
-        alert("Aucun fichier trouvé dans IndexedDB.");
+        alert("Aucun fichier trouvé.");
         return;
     }
 
-    // Envoyer les fichiers vers Dropbox
+    // Envoi des fichiers vers Dropbox
     for (const fichier of fichiers) {
         await envoyerFichierVersDropbox(fichier, token);
     }
@@ -23,11 +20,9 @@ document.getElementById('ma-dropbox-btn').addEventListener('click', async functi
     alert("Tous les fichiers ont été envoyés vers Dropbox !");
 });
 
-// Fonction pour récupérer les fichiers depuis IndexedDB
 async function recupererFichiersDepuisIndexedDB() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("monjournaldebordDB", 1);
-        
         request.onsuccess = function(event) {
             const db = event.target.result;
             const transaction = db.transaction("fichiersDB", "readonly");
@@ -37,22 +32,17 @@ async function recupererFichiersDepuisIndexedDB() {
             getAllRequest.onsuccess = function() {
                 resolve(getAllRequest.result);
             };
-
             getAllRequest.onerror = function() {
                 reject("Erreur lors de la récupération des fichiers.");
             };
         };
-
         request.onerror = function() {
-            reject("Impossible d'ouvrir IndexedDB.");
+            reject("Erreur lors de l'ouverture de IndexedDB.");
         };
     });
 }
 
-// Fonction pour envoyer un fichier vers Dropbox
 async function envoyerFichierVersDropbox(fichier, token) {
-    console.log(`Envoi du fichier ${fichier.nom} vers Dropbox...`);
-
     const blob = dataURLtoBlob(fichier.contenu);
     const response = await fetch("https://content.dropboxapi.com/2/files/upload", {
         method: "POST",
@@ -76,7 +66,7 @@ async function envoyerFichierVersDropbox(fichier, token) {
     }
 }
 
-// Convertir Data URL en Blob
+// Fonction de conversion de Data URL en Blob
 function dataURLtoBlob(dataURL) {
     const parts = dataURL.split(",");
     const byteString = atob(parts[1]);
@@ -88,4 +78,3 @@ function dataURLtoBlob(dataURL) {
     }
     return new Blob([ab], { type: mimeString });
 }
-
