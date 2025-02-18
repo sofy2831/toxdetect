@@ -3,71 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Fichiers Dropbox</title>
+    <title>Ma Dropbox</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 5px;
-        }
-        a {
-            color: #007BFF;
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 5px;
         }
-        a:hover {
-            text-decoration: underline;
+        button:hover {
+            background-color: #0056b3;
+        }
+        #dropbox-container {
+            margin-top: 20px;
+            border: 2px solid #007BFF;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox/10.34.0/Dropbox-sdk.min.js"></script>
 </head>
 <body>
 
-    <h2>Mes Fichiers Dropbox</h2>
-    <p>Voici vos fichiers stockés :</p>
-    <ul id="file-list"></ul>
+    <h2>Accès à votre dossier Dropbox</h2>
+    <p>Vous pouvez consulter vos fichiers stockés en toute sécurité.</p>
 
-    <button onclick="logoutFromDropbox()">Déconnexion</button>
+    <div id="dropbox-container">
+        <h3>Votre dossier : <span style="color:#007BFF;">ToxDetect Backup</span></h3>
+        <p>Voici l'espace où seront stockés vos fichiers importants.</p>
+        
+        <button id="refresh-dropbox">Actualiser</button>
+        <button id="logout-button" onclick="logoutFromDropbox()">Déconnexion</button>
+        
+        <div id="dropbox-embedder" style="margin-top:20px;"></div>
+    </div>
 
     <script>
-        const token = localStorage.getItem("dropbox_token");
-
-        if (!token) {
-            alert("Veuillez vous reconnecter.");
-            window.location.href = "rapport.html";
-        } else {
-            const dbx = new Dropbox.Dropbox({ accessToken: token });
-
-            dbx.filesListFolder({ path: '' }) // Récupérer les fichiers du dossier racine
-                .then(response => {
-                    const fileList = document.getElementById("file-list");
-                    response.entries.forEach(file => {
-                        const fileItem = document.createElement("li");
-                        const fileLink = document.createElement("a");
-                        fileLink.href = `https://www.dropbox.com/home${file.path_display}`;
-                        fileLink.innerText = file.name;
-                        fileLink.target = "_blank";
-                        fileItem.appendChild(fileLink);
-                        fileList.appendChild(fileItem);
-                    });
-                })
-                .catch(error => console.error(error));
-        }
-
         function logoutFromDropbox() {
             localStorage.removeItem("dropbox_token");
-            alert("Déconnexion réussie.");
-            window.location.href = "rapport.html";
+            alert("Vous avez été déconnecté de Dropbox.");
+            window.location.href = "rapport.html"; // Redirige vers la page de connexion
         }
+
+        window.onload = function() {
+            const token = localStorage.getItem("dropbox_token");
+            if (!token) {
+                alert("Veuillez vous connecter à Dropbox sur la page précédente.");
+                window.location.href = "rapport.html"; // Redirection vers la page de connexion
+                return;
+            }
+
+            // Affichage du dossier Dropbox
+            document.getElementById('dropbox-embedder').innerHTML = `
+                <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" width="100%" height="600px"></iframe>
+            `;
+        };
     </script>
+
+</body>
+</html>
+
 <br>
 <button onclick="location.href='rapport.html'">Fermer</button>
 </body>
