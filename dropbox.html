@@ -56,6 +56,17 @@
             alert("Vous avez été déconnecté de Dropbox.");
             window.location.href = "rapport.html"; // Redirige vers la page de connexion
         }
+ function refreshDropbox() {
+        // Efface l'affichage actuel
+        document.getElementById('dropbox-embedder').innerHTML = '';
+
+        // Recharge l'affichage du dossier Dropbox
+        setTimeout(() => {
+            document.getElementById('dropbox-embedder').innerHTML = `
+                <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" width="100%" height="600px"></iframe>
+            `;
+        }, 500); // Légère pause pour éviter le clignotement
+    }
 
         window.onload = function() {
             const token = localStorage.getItem("dropbox_token");
@@ -69,6 +80,8 @@
             document.getElementById('dropbox-embedder').innerHTML = `
                 <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" width="100%" height="600px"></iframe>
             `;
+             // Ajout de l'événement pour le bouton Actualiser
+        document.getElementById("refresh-dropbox").addEventListener("click", refreshDropbox);
         };
     </script>
 
