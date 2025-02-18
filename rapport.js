@@ -1,5 +1,5 @@
 // 1. Exporter les données d'IndexedDB
-async function exportDataFromIndexedDB(dbName, storeName) {
+window.exportDataFromIndexedDB = async function exportDataFromIndexedDB(dbName, storeName) {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName);
     request.onsuccess = (event) => {
@@ -7,12 +7,14 @@ async function exportDataFromIndexedDB(dbName, storeName) {
       const transaction = db.transaction(storeName, 'readonly');
       const objectStore = transaction.objectStore(storeName);
       const data = [];
+      
       objectStore.openCursor().onsuccess = (event) => {
         const cursor = event.target.result;
         if (cursor) {
           data.push(cursor.value);
           cursor.continue();
         } else {
+          console.log("📁 Données récupérées depuis IndexedDB :", data);
           resolve(JSON.stringify(data));
         }
       };
