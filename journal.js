@@ -73,7 +73,7 @@ afficherDate();
                 ajouterDansIndexedDB("fichiersDB", fichierData);
                 filesAdded++;
                 if (filesAdded === fichiers.length) {
-                    alert("Fichiers enregistrés dan IndexedDB !");
+                    alert("Fichiers enregistrés dans IndexedDB !");
                     fichierInput.value = "";
                 }
             };
