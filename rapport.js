@@ -75,8 +75,7 @@ async function exportAndUpload() {
     console.error('Erreur lors de l\'exportation et du téléversement :', error);
   }
 }
-<div class="content-box">
-    <p id="dropbox-folder">Dossier : toxdetect backup</p>
+
     <!-- L'iframe qui intègre le dossier Dropbox -->
     <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" 
             width="100%" 
