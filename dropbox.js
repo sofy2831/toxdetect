@@ -5,6 +5,7 @@ async function exportDataFromIndexedDB(dbName, storeName) {
 
         request.onsuccess = (event) => {
             const db = event.target.result;
+            console.log(`📂 Stores disponibles dans "${dbName}" :`, db.objectStoreNames);
 
             // 📌 Vérifie si le store demandé existe
             if (!db.objectStoreNames.contains(storeName)) {
