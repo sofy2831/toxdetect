@@ -1,7 +1,10 @@
-document.getElementById('ma-dropbox-btn').addEventListener('click', async function() {
-    const token = localStorage.getItem("dropbox_token");
-    if (!token) {
-        alert("Veuillez vous connecter à Dropbox.");
+document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
+    const lienDropboxPublic = "https://www.dropbox.com/s/xxxxxxxxxxxxx/ToxDetect%20Backup?dl=0"; // Remplace par ton lien public réel
+    document.getElementById('dropbox-embedder').innerHTML = `
+        <iframe src="${lienDropboxPublic}" width="100%" height="600px"></iframe>
+    `;
+});
+
         return;
     }
 
