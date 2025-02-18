@@ -75,11 +75,17 @@ async function exportAndUpload() {
     console.error('Erreur lors de l\'exportation et du téléversement :', error);
   }
 }
-Dropbox.embed({
-    link: '/https://www.dropbox.com/home/Applications/ToxDetect%20Backup',
-    container: document.getElementById('dropbox-embedder'),
-    width: '100%',
-    height: '600px'
+<div class="content-box">
+    <p id="dropbox-folder">Dossier : toxdetect backup</p>
+    <!-- L'iframe qui intègre le dossier Dropbox -->
+    <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" 
+            width="100%" 
+            height="600px" 
+            frameborder="0">
+    </iframe>
+</div>
+
+
 });
 
 
