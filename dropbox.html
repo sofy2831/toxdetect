@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Fichiers Dropbox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox/10.34.0/Dropbox-sdk.min.js"></script>
+</head>
+<body>
+
+    <h2>Mes Fichiers Dropbox</h2>
+    <p>Voici vos fichiers stockés :</p>
+    <ul id="file-list"></ul>
+
+    <button onclick="logoutFromDropbox()">Déconnexion</button>
+
+    <script>
+        const token = localStorage.getItem("dropbox_token");
+
+        if (!token) {
+            alert("Veuillez vous reconnecter.");
+            window.location.href = "rapport.html";
+        } else {
+            const dbx = new Dropbox.Dropbox({ accessToken: token });
+
+            dbx.filesListFolder({ path: '' }) // Récupérer les fichiers du dossier racine
+                .then(response => {
+                    const fileList = document.getElementById("file-list");
+                    response.entries.forEach(file => {
+                        const fileItem = document.createElement("li");
+                        const fileLink = document.createElement("a");
+                        fileLink.href = `https://www.dropbox.com/home${file.path_display}`;
+                        fileLink.innerText = file.name;
+                        fileLink.target = "_blank";
+                        fileItem.appendChild(fileLink);
+                        fileList.appendChild(fileItem);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        function logoutFromDropbox() {
+            localStorage.removeItem("dropbox_token");
+            alert("Déconnexion réussie.");
+            window.location.href = "rapport.html";
+        }
+    </script>
+
+</body>
+</html>
