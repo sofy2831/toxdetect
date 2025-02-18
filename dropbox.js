@@ -1,4 +1,4 @@
-// Fonction pour exporter les données d'IndexedDB
+// ✅ Fonction pour exporter les données d'IndexedDB
 async function exportDataFromIndexedDB(dbName, storeName) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(dbName);
@@ -13,7 +13,7 @@ async function exportDataFromIndexedDB(dbName, storeName) {
                     data.push(cursor.value);
                     cursor.continue();
                 } else {
-                    resolve(JSON.stringify(data)); // On retourne les données sous forme de JSON
+                    resolve(JSON.stringify(data)); // ✅ Conversion en JSON
                 }
             };
             transaction.onerror = (event) => {
@@ -26,12 +26,12 @@ async function exportDataFromIndexedDB(dbName, storeName) {
     });
 }
 
-// Fonction pour téléverser des données vers Dropbox
+// ✅ Fonction pour téléverser des données vers Dropbox
 async function uploadToDropbox(accessToken, data, fileName) {
     const dbx = new Dropbox.Dropbox({ accessToken: accessToken });
     try {
         const response = await dbx.filesUpload({
-            path: '/' + fileName,
+            path: '/ToxDetect Backup/' + fileName,
             contents: data,
             mode: 'overwrite'
         });
