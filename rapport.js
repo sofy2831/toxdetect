@@ -75,16 +75,7 @@ async function exportAndUpload() {
     console.error('Erreur lors de l\'exportation et du téléversement :', error);
   }
 }
-
-    <!-- L'iframe qui intègre le dossier Dropbox -->
-    <iframe src="https://www.dropbox.com/home/Applications/ToxDetect%20Backup" 
-            width="100%" 
-            height="600px" 
-            frameborder="0">
-    </iframe>
-</div>
-
-
+    
 });
 
 
