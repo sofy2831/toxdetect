@@ -56,39 +56,84 @@
 </head>
 <body>
     <h1>Mon journal de bord</h1>
+    
+    <!-- Connexion Dropbox -->
+    <button id="connect-dropbox">Se connecter à Dropbox</button>
+    <p id="dropbox-message"><strong>ℹ️ Vous devez être connecté à votre Dropbox pour retrouver vos fichiers.</strong></p>
+
     <p id="dateDisplay"></p>
 
     <textarea id="journalEntry" placeholder="Écrivez votre journal ici..."></textarea>
     <br>
     <button id="save-journal">Enregistrer mon journal</button>
     
-
     <h2>Fichiers à télécharger</h2>     
     <label for="fileUpload">Téléverser des fichiers (PDF, MAIL, SMS) :</label>
-<input type="file" id="fileUpload" accept=".pdf,.mal,.sms" multiple>
-
+    <input type="file" id="fileUpload" accept=".pdf,.mal,.sms" multiple>
   
     <p id="selectedFiles"></p>
     <button id="save-file">Enregistrer mon fichier</button>
 
     <div class="media-container">
         <div class="media-section">
-            <h2>Vidéo et Audio d'urgence</h2>
+            <h2>🎥 Vidéo et 🔊 Audio d'urgence</h2>
             <div class="button-container">
                 <button onclick="window.location.href='videos.html'">Vidéo</button>
                 <button onclick="window.location.href='audios.html'">Audio</button>
             </div>
-        
+        </div>
+    </div>
 
     <h2>Synthèse d’analyse</h2>
-    <button onclick="window.location.href='rapport.html'">Fichier à télécharger</button>
-    <br>
+    
+</script>
+
+<!-- Génération du document Word -->
+
+<p id="message">Avant de générer votre document, prenez un instant pour structurer les faits de manière chronologique et précise. Un récit bien organisé facilite la compréhension de votre situation et renforce l'impact de votre dossier juridique.</p>
+<ul>
+    <li><strong>Décrivez les faits dans l'ordre chronologique</strong> (du plus ancien au plus récent).</li>
+    <li><strong>Soyez précis</strong> : incluez des dates, lieux et personnes impliquées.</li>
+    <li><strong>Restez factuel</strong> : évitez les interprétations et concentrez-vous sur les événements.</li>
+    <li><strong>Mentionnez les preuves</strong> (documents, SMS, mail, écrits, témoignages, etc.).</li>
+</ul>
+<button id="generateButton">Généré un document Word</button>
+<br>
+
+<script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
+<script>
+    document.getElementById("generateButton").addEventListener("click", function() {
+        const { Document, Packer, Paragraph, TextRun } = window.docx;
+
+        const doc = new Document({
+            sections: [
+                {
+                    children: [
+                        new Paragraph({ children: [new TextRun("Bienvenue sur ToxDetect.")] }),
+                        new Paragraph({ children: [new TextRun("Récit des faits.")] }),
+                        new Paragraph({ children: [new TextRun("Date de l’événement : (Pièce n°...)")] }),
+                        new Paragraph({ children: [new TextRun("Signature :")] }),
+                        new Paragraph({ children: [new TextRun("P.S: Indiquer le nom des pièces (Pièces n°...) :")] }),
+                        
+                    ],
+                },
+            ],
+        });
+
+        Packer.toBlob(doc).then((blob) => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "rapport.docx";
+            link.click();
+        });
+    });
+</script>
+
+    <button id="open-dropbox-folder">Ouvrir mon dossier Dropbox</button>
+    <br><br>
+
     <button onclick="window.location.href='index.html'">Retour à l'accueil</button>
 
     <script src="journal.js"></script>
 </body>
 </html>
-
-        
-
-  
