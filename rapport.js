@@ -7,7 +7,7 @@ window.exportDataFromIndexedDB = async function exportDataFromIndexedDB(dbName, 
       const transaction = db.transaction(storeName, 'readonly');
       const objectStore = transaction.objectStore(storeName);
       const data = [];
-      
+
       objectStore.openCursor().onsuccess = (event) => {
         const cursor = event.target.result;
         if (cursor) {
@@ -16,12 +16,14 @@ window.exportDataFromIndexedDB = async function exportDataFromIndexedDB(dbName, 
         } else {
           console.log("📁 Données récupérées depuis IndexedDB :", data);
           resolve(JSON.stringify(data));
-        };
+        }
       };
+
       transaction.onerror = (event) => {
         reject('Erreur lors de l\'exportation des données : ' + event.target.error);
       };
     };
+
     request.onerror = (event) => {
       reject('Erreur lors de l\'ouverture de la base de données : ' + event.target.error);
     };
@@ -32,15 +34,15 @@ window.exportDataFromIndexedDB = async function exportDataFromIndexedDB(dbName, 
 async function authenticateWithDropbox() {
   const CLIENT_ID = '0z41GO683A6XB20';
   const REDIRECT_URI = 'https://sofy2831.github.io/toxdetect/auth.html';
-  const dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
-  const authUrl = dbx.auth.getAuthenticationUrl(REDIRECT_URI);
-  // Rediriger l'utilisateur vers l'URL d'authentification
+
+  const authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT_URI}`;
   window.location.href = authUrl;
 }
 
 // 3. Téléverser les données vers Dropbox
 async function uploadToDropbox(accessToken, data, fileName) {
   const dbx = new Dropbox.Dropbox({ accessToken: accessToken });
+
   try {
     const response = await dbx.filesUpload({
       path: '/' + fileName,
@@ -53,13 +55,15 @@ async function uploadToDropbox(accessToken, data, fileName) {
   }
 }
 
-// Fonction principale pour exporter et téléverser les données
+// 4. Fonction principale pour exporter et téléverser les données
 async function exportAndUpload() {
   try {
-    // Authentifier l'utilisateur et obtenir le token d'accès
-    const accessToken = await authenticateWithDropbox();
+    const accessToken = localStorage.getItem('dropboxAccessToken'); // Doit être récupéré après auth
+    if (!accessToken) {
+      console.error("⚠️ Token Dropbox manquant. L'utilisateur doit s'authentifier.");
+      return;
+    }
 
-    // Exporter et téléverser chaque base de données
     const databases = [
       { dbName: 'IndexedDB', storeName: 'videoDB', fileName: 'videoDB.json' },
       { dbName: 'IndexedDB', storeName: 'audioDB', fileName: 'audioDB.json' },
@@ -75,32 +79,23 @@ async function exportAndUpload() {
     console.error('Erreur lors de l\'exportation et du téléversement :', error);
   }
 }
-    
-});
 
+// 5. Gestion du bouton de sélection de fichiers Dropbox
 document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
     Dropbox.choose({
         success: function(files) {
-            // Afficher les informations des fichiers sélectionnés
             files.forEach(function(file) {
-                console.log('Nom : ' + file.name);
-                console.log('Lien : ' + file.link);
-                // Vous pouvez également afficher ces informations dans votre page
+                console.log('Nom : ' + file.name);
+                console.log('Lien : ' + file.link);
             });
         },
         cancel: function() {
-            // L'utilisateur a annulé l'opération
+            console.log("Sélection annulée.");
         },
-        linkType: 'preview', // ou 'direct' selon vos besoins
-        multiselect: true, // ou false si vous ne souhaitez permettre la sélection que d'un seul fichier
-        extensions: ['.pdf', '.doc', '.docx'], // Filtrer les types de fichiers si nécessaire
+        linkType: 'preview',
+        multiselect: true,
+        extensions: ['.pdf', '.doc', '.docx'],
     });
-});
-document.getElementById('ma-dropbox-btn').addEventListener('click', function() {
-    // Tu code pour l'exportation ou autre logique ici
-
-    // S'il y a une erreur
-    console.error('Erreur lors de l\'exportation et du téléversement :', error);
 });
 
 
