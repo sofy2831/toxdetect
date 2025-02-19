@@ -1,61 +1,85 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Page Journal chargée.");
 
-   // Fonction pour afficher la date du jour
-function afficherDate() {
-    const date = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const dateString = date.toLocaleDateString('fr-FR', options);
-    document.getElementById('dateDisplay').textContent = `Date du jour : ${dateString}`;
-}
-
-// Appel de la fonction pour afficher la date
-afficherDate();
-
-   
-    // Ouvrir IndexedDB
-    let db;
-    const request = indexedDB.open("monjournaldebordDB", 1);
-    
-    request.onupgradeneeded = (event) => {
-        db = event.target.result;
-        if (!db.objectStoreNames.contains("journalDB")) {
-            db.createObjectStore("journalDB", { keyPath: "id", autoIncrement: true });
-        }
-        if (!db.objectStoreNames.contains("fichiersDB")) {
-            db.createObjectStore("fichiersDB", { keyPath: "id", autoIncrement: true });
-        }
-    };
-    
-    request.onsuccess = (event) => {
-        db = event.target.result;
-        console.log("IndexedDB ouvert avec succès");
-
-    };
-    
-    request.onerror = (event) => {
-        console.error("Erreur d'accès à IndexedDB", event.target.errorCode);
-    };
-
-    // Fonction d'ajout dans IndexedDB
-    function ajouterDansIndexedDB(storeName, data) {
-        const transaction = db.transaction([storeName], "readwrite");
-        const store = transaction.objectStore(storeName);
-        store.add(data);
+    // Fonction pour afficher la date du jour
+    function afficherDate() {
+        const date = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = date.toLocaleDateString('fr-FR', options);
+        document.getElementById('dateDisplay').textContent = `Date du jour : ${dateString}`;
     }
 
-    // Gérer l'enregistrement des notes
+    afficherDate();
+
+    let dropboxAppKey = "0z41GO683A6XB20"; // Remplace par ta clé API Dropbox
+    let dbx;
+
+    function connectToDropbox() {
+        let authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${dropboxAppKey}&response_type=token&redirect_uri=https://sofy2831.github.io/toxdetect/auth.html`;
+        window.location.href = authUrl; 
+    }
+
+    function checkDropboxConnection() {
+        if (Dropbox.auth.isAuthenticated()) {
+            dbx = Dropbox.client();
+            console.log("Connecté à Dropbox !");
+        } else {
+            console.log("Non connecté à Dropbox");
+        }
+    }
+
+    function showDropboxConnectionMessage() {
+        if (!Dropbox.auth.isAuthenticated()) {
+            alert("Vous devez être connecté à Dropbox pour enregistrer vos fichiers.");
+        }
+    }
+
+    function getDropboxClient() {
+        const token = localStorage.getItem("dropboxToken");
+        if (!token) {
+            alert("Vous devez être connecté à Dropbox !");
+            return null;
+        }
+        return new Dropbox.Dropbox({ accessToken: token });
+    }
+
+    function saveJournalToDropbox(noteTexte) {
+        const dbx = getDropboxClient();
+        if (!dbx) return;
+
+        const fileName = `journal-${new Date().toLocaleDateString()}.txt`;
+        const fileContent = new Blob([noteTexte], { type: "text/plain" });
+
+        dbx.filesUpload({ path: `/${fileName}`, contents: fileContent })
+            .then(() => alert("Journal enregistré avec succès sur Dropbox !"))
+            .catch(err => console.error("Erreur Dropbox :", err));
+    }
+
+    // Gérer l'enregistrement du journal
     document.getElementById("save-journal").addEventListener("click", () => {
         const noteTexte = document.getElementById("journalEntry").value;
         if (noteTexte.trim() !== "") {
-            const noteData = { texte: noteTexte, date: new Date().toLocaleString() };
-            ajouterDansIndexedDB("journalDB", noteData);
-            document.getElementById("journalEntry").value = ""; // Réinitialisation
-            alert("Journal enregistré dans IndexedDB !");
+            showDropboxConnectionMessage();
+            saveJournalToDropbox(noteTexte);
+            document.getElementById("journalEntry").value = ""; 
         }
     });
 
-    // Gérer l'enregistrement des fichiers
+    function saveFilesToDropbox(fichiers) {
+        const dbx = getDropboxClient();
+        if (!dbx) return;
+
+        Array.from(fichiers).forEach(fichier => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                dbx.filesUpload({ path: `/fichiers/${fichier.name}`, contents: reader.result })
+                    .then(() => alert(`Fichier ${fichier.name} enregistré avec succès sur Dropbox !`))
+                    .catch(err => console.error("Erreur Dropbox :", err));
+            };
+            reader.readAsArrayBuffer(fichier);
+        });
+    }
+
     document.getElementById("save-file").addEventListener("click", () => {
         const fichierInput = document.getElementById("fileUpload");
         const fichiers = fichierInput.files;
@@ -63,21 +87,30 @@ afficherDate();
             alert("Aucun fichier sélectionné.");
             return;
         }
-        
-        let filesAdded = 0;
-        
-        Array.from(fichiers).forEach(fichier => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const fichierData = { nom: fichier.name, contenu: reader.result, date: new Date().toLocaleString() };
-                ajouterDansIndexedDB("fichiersDB", fichierData);
-                filesAdded++;
-                if (filesAdded === fichiers.length) {
-                    alert("Fichiers enregistrés dans IndexedDB !");
-                    fichierInput.value = "";
-                }
-            };
-            reader.readAsDataURL(fichier);
-        });
+
+        showDropboxConnectionMessage();
+        saveFilesToDropbox(fichiers);
+    });
+
+    checkDropboxConnection();
+
+    document.getElementById("connect-dropbox").addEventListener("click", () => {
+        connectToDropbox();
     });
 });
+
+function extractAccessToken() {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get("access_token");
+
+    if (accessToken) {
+        localStorage.setItem("dropboxToken", accessToken);
+        alert("Connexion Dropbox réussie !");
+        window.location.href = "journal.html"; 
+    } else {
+        alert("Erreur lors de l'authentification Dropbox.");
+    }
+}
+
+window.onload = extractAccessToken;
