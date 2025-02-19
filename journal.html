@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -52,88 +52,162 @@
             color: green;
             font-weight: bold;
         }
+        .media-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .media-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
     <h1>Mon journal de bord</h1>
-    
+
     <!-- Connexion Dropbox -->
-    <button id="connect-dropbox">Se connecter à Dropbox</button>
-    <p id="dropbox-message"><strong>ℹ️ Vous devez être connecté à votre Dropbox pour retrouver vos fichiers.</strong></p>
+    <h2>Connexion à Dropbox</h2>
+    <p id="dropbox-message">ℹ️ Vous devez être connecté à votre Dropbox pour retrouver vos fichiers.</p>
+
+    <button id="connect-dropbox" onclick="loginWithDropbox()">Connexion à Dropbox</button>
+    <p id="dropbox-status">❌ Non connecté à Dropbox</p>
+    <button id="logout-button" onclick="logoutFromDropbox()" style="display: none;">Déconnexion</button>
+    
+    <!-- Bouton d'accès au dossier Dropbox -->
+    <button id="ma-dropbox-btn" style="display: none;" onclick="window.location.href='https://www.dropbox.com/home/Applications/ToxDetect%20Backup'">Accéder à mes fichiers Dropbox</button>
+    
+    <!-- Bouton pour consulter Dropbox -->
+    <button id="consult-dropbox-btn" style="display: none;" onclick="window.location.href='https://www.dropbox.com/home'">Consulter ma Dropbox</button>
+
+    <script>
+        const APP_KEY = "0z41GO683A6XB20"; // Clé de l'application Dropbox
+        const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html"; // URL de redirection
+
+        function loginWithDropbox() {
+            const authUrl = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+            window.location.href = authUrl;
+        }
+
+        function getDropboxAccessToken() {
+            const token = localStorage.getItem("dropbox_token");
+            const statusElement = document.getElementById("dropbox-status");
+            const logoutButton = document.getElementById("logout-button");
+            const dropboxButton = document.getElementById("ma-dropbox-btn");
+            const consultButton = document.getElementById("consult-dropbox-btn");
+
+            if (token) {
+                statusElement.innerHTML = "✅ Connecté à Dropbox";
+                logoutButton.style.display = "block";
+                dropboxButton.style.display = "block";
+                consultButton.style.display = "block";
+            } else {
+                statusElement.innerHTML = "❌ Non connecté à Dropbox";
+            }
+        }
+
+        function logoutFromDropbox() {
+            localStorage.removeItem("dropbox_token");
+            alert("Vous avez été déconnecté de Dropbox.");
+            location.reload();
+        }
+
+        window.onload = function() {
+            getDropboxAccessToken();
+
+            const hash = window.location.hash;
+            if (hash) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+                if (accessToken) {
+                    localStorage.setItem("dropbox_token", accessToken);
+                    window.location.hash = '';
+                    getDropboxAccessToken();
+                }
+            }
+        };
+    </script>
 
     <p id="dateDisplay"></p>
 
     <textarea id="journalEntry" placeholder="Écrivez votre journal ici..."></textarea>
     <br>
     <button id="save-journal">Enregistrer mon journal</button>
-    
+
     <h2>Fichiers à télécharger</h2>     
-    <label for="fileUpload">Téléverser des fichiers (PDF, MAIL, SMS) :</label>
-    <input type="file" id="fileUpload" accept=".pdf,.mal,.sms" multiple>
-  
+    <label for="fileUpload">Téléverser des fichiers :</label>
+    <input type="file" id="fileUpload" accept="image/*,application/pdf" multiple onchange="displaySelectedFiles()">
     <p id="selectedFiles"></p>
     <button id="save-file">Enregistrer mon fichier</button>
 
-    <div class="media-container">
-        <div class="media-section">
-            <h2>🎥 Vidéo et 🔊 Audio d'urgence</h2>
-            <div class="button-container">
-                <button onclick="window.location.href='videos.html'">Vidéo</button>
-                <button onclick="window.location.href='audios.html'">Audio</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        function displaySelectedFiles() {
+            const input = document.getElementById("fileUpload");
+            const files = input.files;
+            let fileNames = "";
+            for (let i = 0; i < files.length; i++) {
+                fileNames += files[i].name + "<br>";
+            }
+            document.getElementById("selectedFiles").innerHTML = fileNames || "Aucun fichier sélectionné.";
+        }
+    </script>
 
     <h2>Synthèse d’analyse</h2>
-    
-</script>
 
-<!-- Génération du document Word -->
+    <!-- Texte ajouté avant le bouton pour générer le document -->
+    <p>Avant de générer votre document, prenez un instant pour structurer les faits de manière chronologique et précise. Un récit bien organisé facilite la compréhension de votre situation et renforce l'impact de votre dossier juridique.</p>
+    <p>Décrivez les faits dans l'ordre chronologique (du plus ancien au plus récent).<br>
+       Soyez précis : incluez des dates, lieux et personnes impliquées.<br>
+       Restez factuel : évitez les interprétations et concentrez-vous sur les événements.<br>
+       Mentionnez les preuves (documents, SMS, mail, écrits, témoignages, etc.).
+    </p>
 
-<p id="message">Avant de générer votre document, prenez un instant pour structurer les faits de manière chronologique et précise. Un récit bien organisé facilite la compréhension de votre situation et renforce l'impact de votre dossier juridique.</p>
-<ul>
-    <li><strong>Décrivez les faits dans l'ordre chronologique</strong> (du plus ancien au plus récent).</li>
-    <li><strong>Soyez précis</strong> : incluez des dates, lieux et personnes impliquées.</li>
-    <li><strong>Restez factuel</strong> : évitez les interprétations et concentrez-vous sur les événements.</li>
-    <li><strong>Mentionnez les preuves</strong> (documents, SMS, mail, écrits, témoignages, etc.).</li>
-</ul>
-<button id="generateButton">Généré un document Word</button>
-<br>
+    <button id="generateButton">Générer un document Word</button>
 
-<script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
-<script>
-    document.getElementById("generateButton").addEventListener("click", function() {
-        const { Document, Packer, Paragraph, TextRun } = window.docx;
-
-        const doc = new Document({
-            sections: [
-                {
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
+    <script>
+        document.getElementById("generateButton").addEventListener("click", function() {
+            const { Document, Packer, Paragraph, TextRun } = window.docx;
+            const doc = new Document({
+                sections: [{
                     children: [
                         new Paragraph({ children: [new TextRun("Bienvenue sur ToxDetect.")] }),
                         new Paragraph({ children: [new TextRun("Récit des faits.")] }),
                         new Paragraph({ children: [new TextRun("Date de l’événement : (Pièce n°...)")] }),
                         new Paragraph({ children: [new TextRun("Signature :")] }),
-                        new Paragraph({ children: [new TextRun("P.S: Indiquer le nom des pièces (Pièces n°...) :")] }),
-                        
                     ],
-                },
-            ],
-        });
+                }],
+            });
 
-        Packer.toBlob(doc).then((blob) => {
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "rapport.docx";
-            link.click();
+            Packer.toBlob(doc).then((blob) => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "rapport.docx";
+                link.click();
+            });
         });
-    });
-</script>
+    </script>
 
-    <button id="open-dropbox-folder">Ouvrir mon dossier Dropbox</button>
-    <br><br>
+    <!-- Boutons Vidéo et Audio avec icônes -->
+    <div class="media-container">
+        <div class="media-section">
+            <button class="media-btn" onclick="window.location.href='video.html'">
+                <img src="video-icon.png" alt="Vidéo" style="width: 30px; vertical-align: middle; margin-right: 10px;">
+                Vidéo
+            </button>
+        </div>
+        <div class="media-section">
+            <button class="media-btn" onclick="window.location.href='audio.html'">
+                <img src="audio-icon.png" alt="Audio" style="width: 30px; vertical-align: middle; margin-right: 10px;">
+                Audio
+            </button>
+        </div>
+    </div>
 
     <button onclick="window.location.href='index.html'">Retour à l'accueil</button>
-
-    <script src="journal.js"></script>
 </body>
 </html>
