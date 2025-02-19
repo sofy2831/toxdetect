@@ -7,11 +7,11 @@ async function exportDataFromIndexedDB(dbName, storeName) {
             const db = event.target.result;
             console.log(`📂 Stores disponibles dans "${dbName}" :`, db.objectStoreNames);
 
-            // 📌 Vérifie si le store demandé existe
-            if (!db.objectStoreNames.contains(storeName)) {
-                return reject(`⚠️ Le store "${storeName}" n'existe pas dans la base de données "${dbName}".`);
+if (!db.objectStoreNames.contains(storeName)) {
+                console.error(`⚠️ Le store "${storeName}" n'existe pas dans la base "${dbName}"`);
+                return reject(`⚠️ Le store "${storeName}" n'existe pas.`);
             }
-
+            
             const transaction = db.transaction(storeName, 'readonly');
             const objectStore = transaction.objectStore(storeName);
             const data = [];
@@ -19,6 +19,7 @@ async function exportDataFromIndexedDB(dbName, storeName) {
             objectStore.openCursor().onsuccess = (event) => {
                 const cursor = event.target.result;
                 if (cursor) {
+                    console.log(`📌 Donnée trouvée dans "${storeName}" :`, cursor.value);
                     data.push(cursor.value);
                     cursor.continue();
                 } else {
@@ -27,11 +28,13 @@ async function exportDataFromIndexedDB(dbName, storeName) {
             };
 
             transaction.onerror = (event) => {
+                console.error('❌ Erreur transaction IndexedDB :', event.target.error);
                 reject('❌ Erreur lors de l\'exportation des données : ' + event.target.error);
             };
         };
 
         request.onerror = (event) => {
+            console.error('❌ Impossible d\'ouvrir IndexedDB :', event.target.error);
             reject('❌ Erreur lors de l\'ouverture de la base de données : ' + event.target.error);
         };
     });
