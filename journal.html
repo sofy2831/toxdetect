@@ -155,6 +155,23 @@
             document.getElementById("selectedFiles").innerHTML = fileNames || "Aucun fichier sélectionné.";
         }
     </script>
+    
+    <!-- Boutons Vidéo et Audio avec icônes -->
+    <div class="media-container">
+        <div class="media-section">
+            <button class="media-btn" onclick="window.location.href='video.html'">
+                <img src="video-icon.png" alt="Vidéo" style="width: 30px; vertical-align: middle; margin-right: 10px;">
+                Vidéo
+            </button>
+        </div>
+        <div class="media-section">
+            <button class="media-btn" onclick="window.location.href='audio.html'">
+                <img src="audio-icon.png" alt="Audio" style="width: 30px; vertical-align: middle; margin-right: 10px;">
+                Audio
+            </button>
+        </div>
+    </div>
+
 
     <h2>Synthèse d’analyse</h2>
 
@@ -192,22 +209,7 @@
         });
     </script>
 
-    <!-- Boutons Vidéo et Audio avec icônes -->
-    <div class="media-container">
-        <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='video.html'">
-                <img src="video-icon.png" alt="Vidéo" style="width: 30px; vertical-align: middle; margin-right: 10px;">
-                Vidéo
-            </button>
-        </div>
-        <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='audio.html'">
-                <img src="audio-icon.png" alt="Audio" style="width: 30px; vertical-align: middle; margin-right: 10px;">
-                Audio
-            </button>
-        </div>
-    </div>
-
+    
     <button onclick="window.location.href='index.html'">Retour à l'accueil</button>
 </body>
 </html>
