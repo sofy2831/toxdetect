@@ -3,6 +3,33 @@ async function exportDataFromIndexedDB(dbName, storeName) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(dbName);
 
+        async function exportAllData() {
+    const dbStores = [
+        { dbName: 'videoDB', storeName: 'videos' },
+        { dbName: 'audioDB', storeName: 'audios' },
+        { dbName: 'monjournaldebordDB', storeName: 'fichiersDB' },
+        { dbName: 'monjournaldebordDB', storeName: 'journalDB' }
+    ];
+
+    for (const { dbName, storeName } of dbStores) {
+        try {
+            const data = await exportDataFromIndexedDB(dbName, storeName);
+            
+            // ✅ Vérification des données exportées
+            console.log(`Export depuis "${dbName}" -> "${storeName}" :`, data);
+
+            if (data.length > 0) {
+                await uploadToDropbox(localStorage.getItem('dropboxToken'), data, `${storeName}.json`);
+                console.log(`✅ Données de "${storeName}" envoyées à Dropbox avec succès !`);
+            } else {
+                console.warn(`⚠️ Aucune donnée à exporter pour "${storeName}".`);
+            }
+        } catch (error) {
+            console.error(`❌ Erreur lors de l'export depuis "${dbName}" -> "${storeName}" :`, error);
+        }
+    }
+}
+        
         request.onsuccess = (event) => {
             const db = event.target.result;
             console.log(`📂 Stores disponibles dans "${dbName}" :`, db.objectStoreNames);
