@@ -14,6 +14,7 @@ async function exportDataFromIndexedDB(dbName, storeName) {
 
 if (!db.objectStoreNames.contains(storeName)) {
                 console.error(`⚠️ Le store "${storeName}" n'existe pas dans la base "${dbName}"`);
+                console.warn(`🔎 Liste des stores trouvés dans "${dbName}" :`, [...db.objectStoreNames]);
                 return reject(`⚠️ Le store "${storeName}" n'existe pas.`);
             }
             
