@@ -16,7 +16,7 @@ window.exportDataFromIndexedDB = async function exportDataFromIndexedDB(dbName, 
         } else {
           console.log("📁 Données récupérées depuis IndexedDB :", data);
           resolve(JSON.stringify(data));
-        }
+        };
       };
       transaction.onerror = (event) => {
         reject('Erreur lors de l\'exportation des données : ' + event.target.error);
