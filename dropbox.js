@@ -96,3 +96,8 @@ async function exportDataToDropbox() {
         alert("Une erreur est survenue lors du transfert des fichiers.");
     }
 }
+// Exécuter automatiquement le transfert des données vers Dropbox au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    exportAllData();
+});
+
