@@ -89,9 +89,7 @@ async function exportDataToDropbox() {
         if (accessToken) {
             await uploadToDropbox(accessToken, data, "backup.json"); // 📤 Envoie à Dropbox
             alert("✅ Les fichiers ont été transférés vers votre Dropbox !");
-        } else {
-            alert("❌ Veuillez vous connecter à Dropbox.");
-        }
+               }
     } catch (error) {
         console.error("❌ Erreur de transfert :", error);
         alert("Une erreur est survenue lors du transfert des fichiers.");
