@@ -1,3 +1,8 @@
+indexedDB.databases().then((dbs) => {
+    console.log("📂 Bases de données IndexedDB trouvées :", dbs);
+});
+
+
 // ✅ Fonction pour exporter les données d'un store IndexedDB
 async function exportDataFromIndexedDB(dbName, storeName) {
     return new Promise((resolve, reject) => {
