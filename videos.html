@@ -108,13 +108,21 @@
             const headers = {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
                 'Content-Type': 'application/octet-stream',  // Type de contenu générique pour l'upload
-                'Dropbox-API-Arg': JSON.stringify({
-                    path: '/backup_video.mp4', // Remplacez le nom et le chemin si nécessaire
-                    mode: 'add',
-                    autorename: true,
-                    mute: false
-                })
-            };
+
+          const dropboxArgs = {
+            path: `/backup_video.mp4`, // Doit commencer par "/"
+            mode: 'add',
+            autorename: true,
+            mute: false
+    };
+const headers = {
+        'Authorization': `Bearer ${ACCESS_TOKEN}`,
+        'Content-Type': 'application/octet-stream',
+        'Dropbox-API-Arg': JSON.stringify(dropboxArgs) // Corrige la syntaxe JSON
+    };
+
+                
+               
 
             try {
                 const response = await fetch(url, {
