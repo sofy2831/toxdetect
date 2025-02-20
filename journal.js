@@ -80,13 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoButton = document.createElement("button");
     videoButton.textContent = "Vidéo";
     videoButton.classList.add("icon-button");
-    videoButton.onclick = () => window.location.href = "video.html";
+    videoButton.onclick = () => window.location.href = "videos.html";
     document.body.appendChild(videoButton);
 
     const audioButton = document.createElement("button");
     audioButton.textContent = "Audio";
     audioButton.classList.add("icon-button");
-    audioButton.onclick = () => window.location.href = "audio.html";
+    audioButton.onclick = () => window.location.href = "audios.html";
     document.body.appendChild(audioButton);
 
     const consultDropboxButton = document.createElement("button");
