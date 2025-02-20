@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Configuration Dropbox
     const dropboxAppKey = "0z41GO683A6XB20"; 
     let accessToken = localStorage.getItem("dropboxToken");
+    console.log("Access Token:", accessToken);
 
     function connectToDropbox() {
         let authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${dropboxAppKey}&response_type=token&redirect_uri=${window.location.origin}/journal.html`;
