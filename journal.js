@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let accessToken = localStorage.getItem("dropboxToken");
 
     function connectToDropbox() {
-        let authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${dropboxAppKey}&response_type=token&redirect_uri=${window.location.origin}/auth.html`;
+        let authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${dropboxAppKey}&response_type=token&redirect_uri=${window.location.origin}/journal.html`;
         window.location.href = authUrl;
     }
 
