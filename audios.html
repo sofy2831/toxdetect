@@ -113,7 +113,7 @@
             clearInterval(progressInterval);
         }
 
-        function saveAudio() {
+        async function saveAudio() {
             const blob = new Blob(chunks, { type: 'audio/wav' });
             const audioURL = URL.createObjectURL(blob);
             document.getElementById('audioPlayer').src = audioURL;
@@ -121,31 +121,39 @@
             document.getElementById('progressContainer').style.display = 'none';
             document.getElementById('progressBar').style.width = '0%';
 
-            const request = indexedDB.open('audioDB', 1);
+            // Envoi de l'audio sur Dropbox
+            await uploadAudioToDropbox(blob);
+        }
 
-            request.onupgradeneeded = event => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains('audios')) {
-                    db.createObjectStore('audios', { keyPath: 'id', autoIncrement: true });
-                }
+        async function uploadAudioToDropbox(blob) {
+            const ACCESS_TOKEN = 'YOUR_DROPBOX_ACCESS_TOKEN'; // Remplacez par votre jeton d'accès Dropbox
+            const url = 'https://content.dropboxapi.com/2/files/upload';
+            const headers = {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/octet-stream',
+                'Dropbox-API-Arg': JSON.stringify({
+                    path: '/emergency_audio.wav', // Chemin de destination dans Dropbox
+                    mode: 'add',
+                    autorename: true,
+                    mute: false
+                })
             };
-            request.onsuccess = event => {
-                const db = event.target.result;
-                const transaction = db.transaction('audios', 'readwrite');
-                const objectStore = transaction.objectStore('audios');
-                const addRequest = objectStore.add({ fileName: 'emergency_audio.wav', fileContent: blob });
 
-                addRequest.onsuccess = () => {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: blob
+                });
+
+                if (response.ok) {
                     alert('Audio enregistré dans votre Dropbox!');
-                };
-                addRequest.onerror = () => {
+                } else {
                     alert('Erreur lors de l’enregistrement de l’audio.');
-                };
-            };
-
-            request.onerror = () => {
+                }
+            } catch (error) {
                 alert('Erreur lors de l’accès à Dropbox.');
-            };
+            }
         }
     </script>
 </body>
