@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function saveJournalToDropbox(noteTexte) {
-        console.log("Tentative d'enregistrement du journal...");
+       console.log("Envoi du journal à Dropbox :", noteTexte);
         const dbx = getDropboxClient();
 
         if (!dbx) {
