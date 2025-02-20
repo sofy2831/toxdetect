@@ -56,7 +56,7 @@
             try {
                 videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 document.getElementById('videoPlayer').srcObject = videoStream;
-                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/mp4' }); // Spécifiez mp4 ici
+                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/quicktime' }); // Format MOV
                 mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
                 mediaRecorder.onstop = saveVideo;
 
@@ -81,7 +81,7 @@
             document.getElementById('startRecordingBtn').style.display = 'inline-block';
             document.getElementById('stopRecordingBtn').style.display = 'none';
             document.getElementById('pauseResumeBtn').style.display = 'none';
-            alert('Vidéo envoyée !'); // Affiche l'alerte ici
+            alert('Vidéo envoyée !');
         }
 
         function togglePauseResume() {
@@ -95,9 +95,9 @@
         }
 
         function saveVideo() {
-            const blob = new Blob(chunks, { type: 'video/mp4' }); // Utiliser le type 'mp4' ici
+            const blob = new Blob(chunks, { type: 'video/quicktime' }); // Format MOV
             console.log("Blob généré :", blob);
-            uploadVideoToDropbox(blob);
+            uploadVideoToDropbox(blob);  // Appel de la fonction d'upload
         }
 
         // Fonction pour uploader la vidéo vers Dropbox
@@ -106,9 +106,9 @@
             const url = 'https://content.dropboxapi.com/2/files/upload';
             const headers = {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                'Content-Type': 'video/mp4',  // Définissez ici le type vidéo mp4
+                'Content-Type': 'application/octet-stream',  // Type de contenu générique pour l'upload
                 'Dropbox-API-Arg': JSON.stringify({
-                    path: '/emergency_video.mp4', // Chemin de destination dans Dropbox
+                    path: '/backup_video.mov', // Remplacez le nom et le chemin si nécessaire
                     mode: 'add',
                     autorename: true,
                     mute: false
@@ -124,12 +124,15 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log("Fichier vidéo téléchargé avec succès", data);
+                    console.log("vidéo téléchargé avec succès dans votre dropbox:", data);
                 } else {
-                    throw new Error('Échec de l\'upload de la vidéo');
+                    const errorData = await response.json();
+                    console.error("Échec de l'upload de la vidéo", errorData);
+                    alert('Une erreur est survenue lors du téléchargement de la vidéo.');
                 }
             } catch (error) {
-                console.error("Erreur lors de l'upload de la vidéo:", error);
+                console.error("Erreur lors de l'upload de la vidéo :", error);
+                alert('Une erreur est survenue lors du téléchargement de la vidéo.');
             }
         }
 
