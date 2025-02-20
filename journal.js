@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
              .catch(err => {
             console.error("Erreur Dropbox :", err);
-            alert("Erreur Dropbox : " + err.message);
+            alert("Erreur Dropbox : " + JSON.stringify(err));
         });
     }
 
