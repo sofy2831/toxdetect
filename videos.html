@@ -46,7 +46,6 @@
         let videoStream;
         let chunks = [];
         let isRecording = false;
-        const ACCESS_TOKEN = 'sl.u.AFhnCuqUpn8egPodjZyOfkZlcqdOKKV7U0mAG86UdGN_Lh-qDjhIF6ZGoUE51HtMfgAkRr6eQDhNc3pUG3DAf0qQGhVlQQQdb8JEeLM3GQsz5p_uZLZ-hwAaNvLPlEv8sKnMjbMbuiA3w7fX7XOsuUxSP2Pv1pwgVvFSWyFuDul05ZerqSE1dy8sE16TtCZ7oQ_KRO0FwNHN-d2sni6507JEwVxytmQavC1Ag5ADOgTxT5dEDM_8JbcwrBOcy-sijcTHd7Yt2xNZvC-uqsu3tNvPq5In2ojjZxIximSxOPzhD0pJ24AEuCx3gGtgjpN0yBTTTSwPONLeGkOFt6lMSD-_BFS_BVCJhp5jUTPMdLsmPvlrvqLDY7iW_J6T4x-zPDWoshpkcdJ_9hoYxXXU10aFslgbb_-3P4WC0uRdeQJTt4Twswm0V-M-0MG4jFcSCknikeQRv5ACvwiu9dUH5t2dyfH3SjwoP-jUSmN0t0yQG9SjLS8qufCQXWLM7v4Xr4WnKPQDI5BZVZIao_ttY6eI0XqKTfukU4MT0DuVkhpOZ5kqCe1pKQpqCtpMJd3KkOHFVbe6iUjxXWVNluEW4dVFd4v4eLwX0-NDO3e27WWfAYXRtdkG0y_1aLCxtwYO3k69yYA-NEdklZcb0i6NsKtkQyeXsJdYovL2q7wXth_WoBHF2EWowg8XkAdjdAsaobvKGwqw-bEfdbK7ZU7NAYVygyc52Qv7LAdt6jaKQ1Tv5Vs8K9Zcjf59yYE59NqO8C4ua_2xPBBLJgp7B9rmDcePguwbVcbkW6tsjx4x8qG_MFZ6OlLBxFI7k_WZKmpGBxuIslcouUYbSM3eeIUr0N_51SHrieixtxaAalYhefmMxHDTEe_4XrCuR3GpaU6wRTd_RkETVyIEnhKabsCIqEqUsNSMkky2XKeTz73AUS00mSs-Rm6wKj2tbg0uwkCnc__wLoOGOURwXR4xSJOiLietqpLvAFIer14rSUmFKzkM1RynfXf1M-Eayrmbi3z76HxNT3TU07C2KjWXmTp3PFapmptMu7_vwNKVudO37kP9fdPdY9bJ4w4757Joqy4j3cwPZMqv7IUBUz25fwQovVWWBcgqtjAoe93QOT_jK562YBpQrqU-Y9IbognoHteN92cGLk7jTwqHUW_shZOB_pQHDGeLtxoIS_fCy8UcLN8PftJxYuvjDzYoKzR3R1YO8DMdtpLR3fj3Km8on0vZ1tM6_MT2cQspY2nVrhMhX6Nxs8pF_IuxpO8uY6d-gzwkgNY'; // Remplacez par votre jeton d'accès Dropbox
 
         document.getElementById('startRecordingBtn').addEventListener('click', startRecording);
         document.getElementById('stopRecordingBtn').addEventListener('click', stopRecording);
@@ -100,33 +99,36 @@
             uploadToDropbox(blob);
         }
 
-        // Fonction pour uploader la vidéo vers Dropbox
-        function uploadToDropbox(videoBlob) {
-            const formData = new FormData();
-            formData.append('file', videoBlob, 'emergency_video.webm');
+   // Fonction pour uploader la vidéo vers Dropbox
+        async function uploadVideoToDropbox(blob) {
+            const ACCESS_TOKEN = 'sl.u.AFhnCuqUpn8egPodjZyOfkZlcqdOKKV7U0mAG86UdGN_Lh-qDjhIF6ZGoUE51HtMfgAkRr6eQDhNc3pUG3DAf0qQGhVlQQQdb8JEeLM3GQsz5p_uZLZ-hwAaNvLPlEv8sKnMjbMbuiA3w7fX7XOsuUxSP2Pv1pwgVvFSWyFuDul05ZerqSE1dy8sE16TtCZ7oQ_KRO0FwNHN-d2sni6507JEwVxytmQavC1Ag5ADOgTxT5dEDM_8JbcwrBOcy-sijcTHd7Yt2xNZvC-uqsu3tNvPq5In2ojjZxIximSxOPzhD0pJ24AEuCx3gGtgjpN0yBTTTSwPONLeGkOFt6lMSD-_BFS_BVCJhp5jUTPMdLsmPvlrvqLDY7iW_J6T4x-zPDWoshpkcdJ_9hoYxXXU10aFslgbb_-3P4WC0uRdeQJTt4Twswm0V-M-0MG4jFcSCknikeQRv5ACvwiu9dUH5t2dyfH3SjwoP-jUSmN0t0yQG9SjLS8qufCQXWLM7v4Xr4WnKPQDI5BZVZIao_ttY6eI0XqKTfukU4MT0DuVkhpOZ5kqCe1pKQpqCtpMJd3KkOHFVbe6iUjxXWVNluEW4dVFd4v4eLwX0-NDO3e27WWfAYXRtdkG0y_1aLCxtwYO3k69yYA-NEdklZcb0i6NsKtkQyeXsJdYovL2q7wXth_WoBHF2EWowg8XkAdjdAsaobvKGwqw-bEfdbK7ZU7NAYVygyc52Qv7LAdt6jaKQ1Tv5Vs8K9Zcjf59yYE59NqO8C4ua_2xPBBLJgp7B9rmDcePguwbVcbkW6tsjx4x8qG_MFZ6OlLBxFI7k_WZKmpGBxuIslcouUYbSM3eeIUr0N_51SHrieixtxaAalYhefmMxHDTEe_4XrCuR3GpaU6wRTd_RkETVyIEnhKabsCIqEqUsNSMkky2XKeTz73AUS00mSs-Rm6wKj2tbg0uwkCnc__wLoOGOURwXR4xSJOiLietqpLvAFIer14rSUmFKzkM1RynfXf1M-Eayrmbi3z76HxNT3TU07C2KjWXmTp3PFapmptMu7_vwNKVudO37kP9fdPdY9bJ4w4757Joqy4j3cwPZMqv7IUBUz25fwQovVWWBcgqtjAoe93QOT_jK562YBpQrqU-Y9IbognoHteN92cGLk7jTwqHUW_shZOB_pQHDGeLtxoIS_fCy8UcLN8PftJxYuvjDzYoKzR3R1YO8DMdtpLR3fj3Km8on0vZ1tM6_MT2cQspY2nVrhMhX6Nxs8pF_IuxpO8uY6d-gzwkgNY'; // Remplacez par votre jeton d'accès Dropbox
+            const url = 'https://content.dropboxapi.com/2/files/upload';
+            const headers = {
+                'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                'Content-Type': 'application/octet-stream',
+                'Dropbox-API-Arg': JSON.stringify({
+                    path: '/emergency_video.webm', // Chemin de destination dans Dropbox
+                    mode: 'add',
+                    autorename: true,
+                    mute: false
+                })
+            };
 
-            fetch('https://content.dropboxapi.com/2/files/upload', {
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                    'Dropbox-API-Arg': JSON.stringify({
-                        path: '/emergency_video.webm',  // Chemin où la vidéo sera stockée
-                        mode: 'add',
-                        autorename: true,
-                        mute: false
-                    })
-                },
-                body: videoBlob
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Vidéo téléchargée avec succès sur Dropbox', data);
-                alert('Vidéo enregistrée dans votre Dropbox!');
-            })
-            .catch(error => {
-                console.error('Erreur lors de l\'upload vers Dropbox', error);
+                headers: headers,
+                body: blob
             });
+
+            if (response.ok) {
+                console.log('Vidéo téléchargée avec succès');
+                alert('Vidéo téléchargée avec succès dans votre Dropbox!');
+            } else {
+                console.error('Erreur lors de l\'upload de la vidéo', response.status);
+                alert('Erreur lors de l\'upload de la vidéo.');
+            }
         }
+
 
         // Fonction pour fermer la vidéo et afficher l'alerte
         function closeVideo() {
