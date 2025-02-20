@@ -28,17 +28,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function saveJournalToDropbox(noteTexte) {
+        console.log("Tentative d'enregistrement du journal...");
         const dbx = getDropboxClient();
-        if (!dbx) return;
 
+        if (!dbx) {
+        console.log("Erreur : pas de client Dropbox");
+        return;
+    }
+       
         const fileName = `backup/journal-${new Date().toISOString().split("T")[0]}.txt`;
 
         dbx.filesUpload({ path: `/${fileName}`, contents: noteTexte, mode: 'overwrite' })
             .then(() => {
+                console.log("Enregistrement réussi !");
                 alert("Journal enregistré avec succès sur Dropbox !");
                 document.getElementById("journalEntry").value = "";
             })
-            .catch(err => alert("Erreur Dropbox : " + err.message));
+             .catch(err => {
+            console.error("Erreur Dropbox :", err);
+            alert("Erreur Dropbox : " + err.message);
+        });
     }
 
     function saveFilesToDropbox(fichiers) {
