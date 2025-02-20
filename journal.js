@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function extractAccessToken() {
+    console.log("Access Token extrait:", accessToken);
     const params = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = params.get("access_token");
 
