@@ -56,7 +56,7 @@
             try {
                 videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 document.getElementById('videoPlayer').srcObject = videoStream;
-                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/quicktime' }); // Format MOV
+                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/mp4' }); // Format MP4
                 mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
                 mediaRecorder.onstop = saveVideo;
 
@@ -81,7 +81,8 @@
             document.getElementById('startRecordingBtn').style.display = 'inline-block';
             document.getElementById('stopRecordingBtn').style.display = 'none';
             document.getElementById('pauseResumeBtn').style.display = 'none';
-            alert('Vidéo envoyée !');
+            
+            alert('Vidéo envoyée !'); // L'alerte ne se déclenche plus sur "Fermer"
         }
 
         function togglePauseResume() {
@@ -95,20 +96,20 @@
         }
 
         function saveVideo() {
-            const blob = new Blob(chunks, { type: 'video/quicktime' }); // Format MOV
+            const blob = new Blob(chunks, { type: 'video/mp4' }); // Format MP4
             console.log("Blob généré :", blob);
-            uploadVideoToDropbox(blob);  // Appel de la fonction d'upload
+            uploadVideoToDropbox(blob);  // Envoi vers Dropbox
         }
 
         // Fonction pour uploader la vidéo vers Dropbox
         async function uploadVideoToDropbox(blob) {
-            const ACCESS_TOKEN = 'sl.u.AFil1rIpZuuvBmQqDka8idhSTBUItRtWiz0QTfspWe_ej60GEeNuzBdZMVtCw1-iEbGPofGnp1RkreyBqiWnCtMJV-72ikQjT-zxxzgHX-AAb0xTl4TA-HqmWRbbHHgNYu1Lx23KmsTnnH4mxD_Dz0_Iu7JQmLGdqhFL1rCNuBuo3g0fU9MLeLTpfSyXiHSOD_ljqH1m9Rdfj73McvF7rHaO5UPoTQk9ZzpdJ6guO0Rn8uhImzsYpgP41HEsulKnyZXrUobc-aYuZXXwtkkwayedT3t0rp9-GGFTb8NhyQe6c0hOo23_fjB_tAtUDgtsoSEE1o6CpQuirREowx5hFhDI3O0nhhC5N90D79tVxZbb6EpwxFqM_xHomZ63tVSY1GFLW8bcxI3S9AuaauG6ZnKGjATO9zn57ZKqKlpIYNESbTY2JOuEnFe9Z0tQ011p-JZZ4IGGGrZYMbHPJZFc0ei4hIZY0FtutCzAA1yq2xFiJRFpYfEllFLQbqGH69l7tQYaS6kG7lOoEEO2MYO5q0v0Uwi6nm2jp_VeUoTbk7kwz0p1DY2XAeBRxfcBA7J4sfXncVmA0NjLIsCPHJDA_8wTvSwxaWWesPBSXfBJLSedHbIRcpqstVeyPcQ1TZW7jhjbKH1ahei3hLT0CHSpprIKyxim2QOk7YQXMFRnqIuCUVY0u3B1Ec89RyaQ5C140QPb4mZLqk7FKh5R7t3I2jc7-D70KjJs98XLNZYMEirjaKxABltq-mhzllwcOVTl9HX3P-EclwyCt7LPN2nw2IiTfrrmVgLuxmgqKiI93LFRO28FDsZtHFjdmGpXjTfsG7TLSbwqkI8VAd5dTgSWkELwGQclQzGOnWDNUHnJzJmpSxBz3T_E1c8XeOMOn6SYZMDckYiWBvfz42KOH6FpOy3P1hDhvLwKWkR3incegDuzjf2xlQeMcNfxID9EZjCki7NOQjeKaHR4YIk2OqDCHaMeYjDgRcpqIjmjDBzX-K2FJ_VUK6HW8RFBmTDeA7sHPIU5oKdiEjFCr6BCrxq8KgeT3T3X8hxl-kKPtOj0KOxpl-X9FP3G0T5w172_bciiL8l1qBkY1hp1Iw3FSp2n0phHPpe65WHQSP7mSPP45wDmyZZSuz6kGk4Y2ZHJvKE6t5aOixBp4hY9qIKJL4X4dKFm7xzYeGVp__UDXMFto7VM84YeWbgrYlnY8_yZL0kByhRYlNz4G_45KP2j6Zg051bJ16mXHq0cP8hLOHZcNXm1bV4cbzcL8aRJNiCAw_XiSic'; // Remplacez par votre jeton d'accès Dropbox
+            const ACCESS_TOKEN = 'votre_token_d_acces'; // Remplacez par votre jeton d'accès Dropbox
             const url = 'https://content.dropboxapi.com/2/files/upload';
             const headers = {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
                 'Content-Type': 'application/octet-stream',  // Type de contenu générique pour l'upload
                 'Dropbox-API-Arg': JSON.stringify({
-                    path: '/backup_video.mov', // Remplacez le nom et le chemin si nécessaire
+                    path: '/backup_video.mp4', // Remplacez le nom et le chemin si nécessaire
                     mode: 'add',
                     autorename: true,
                     mute: false
@@ -124,7 +125,7 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log("vidéo téléchargé avec succès dans votre dropbox:", data);
+                    console.log("Fichier vidéo téléchargé avec succès :", data);
                 } else {
                     const errorData = await response.json();
                     console.error("Échec de l'upload de la vidéo", errorData);
