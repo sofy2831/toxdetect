@@ -106,7 +106,7 @@
             const url = 'https://content.dropboxapi.com/2/files/upload';
             const headers = {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                'Content-Type': 'application/octet-stream',
+                'Content-Type': 'video/mp4',  // Adapter en fonction du type vidéo
                 'Dropbox-API-Arg': JSON.stringify({
                     path: '/emergency_video.webm', // Chemin de destination dans Dropbox
                     mode: 'add',
