@@ -81,6 +81,7 @@
             document.getElementById('startRecordingBtn').style.display = 'inline-block';
             document.getElementById('stopRecordingBtn').style.display = 'none';
             document.getElementById('pauseResumeBtn').style.display = 'none';
+            alert('Vidéo envoyée !'); // Affiche l'alerte ici
         }
 
         function togglePauseResume() {
@@ -132,16 +133,9 @@
             }
         }
 
-        // Fonction pour fermer la vidéo et afficher l'alerte
+        // Fonction pour fermer la vidéo et rediriger vers la page du journal
         function closeVideo() {
-            if (isRecording) {
-                stopRecording();
-            }
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById('videoPlayer').srcObject = null;
-            alert('Vidéo envoyée !');
+            window.location.href = 'journal.html'; // Redirige vers la page journal.html
         }
     </script>
 </body>
