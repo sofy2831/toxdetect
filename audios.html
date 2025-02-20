@@ -136,7 +136,7 @@
                 const addRequest = objectStore.add({ fileName: 'emergency_audio.wav', fileContent: blob });
 
                 addRequest.onsuccess = () => {
-                    alert('Audio enregistré dans IndexedDB!');
+                    alert('Audio enregistré dans votre Dropbox!');
                 };
                 addRequest.onerror = () => {
                     alert('Erreur lors de l’enregistrement de l’audio.');
@@ -144,7 +144,7 @@
             };
 
             request.onerror = () => {
-                alert('Erreur lors de l’accès à IndexedDB.');
+                alert('Erreur lors de l’accès à Dropbox.');
             };
         }
     </script>
