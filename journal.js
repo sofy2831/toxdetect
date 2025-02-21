@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     })
                     .catch(err => alert("Erreur Dropbox : " + err.message));
             };
-            reader.readAsArrayBuffer(fichier);
+           
         });
     }
 
