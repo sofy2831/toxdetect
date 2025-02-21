@@ -36,12 +36,15 @@ function removeContact(button) {
 function checkOtherOption() {
     let predefinedMessageSelect = document.getElementById("predefinedMessage");
     let customMessageTextarea = document.getElementById("customMessage");
-
+    let selectedMessageDiv = document.getElementById("selectedMessage");
+    
     if (predefinedMessageSelect.value === "other") {
         customMessageTextarea.style.display = "block";
+        selectedMessageDiv.innerText = ""; // Efface l'ancien message si "Autre" est choisi
+        
     } else {
         customMessageTextarea.style.display = "none";
-        customMessageTextarea.value = "";
+       selectedMessageDiv.innerText = "Message sélectionné : " + predefinedMessage;
     }
 function updateSelectedMessage() {
     let predefinedMessage = document.getElementById("predefinedMessage").value;
