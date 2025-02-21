@@ -46,6 +46,7 @@
         let videoStream;
         let chunks = [];
         let isRecording = false;
+        const ACCESS_TOKEN = 'TON_ACCESS_TOKEN_DROPBOX'; // Remplace par ton token Dropbox
 
         document.getElementById('startRecordingBtn').addEventListener('click', startRecording);
         document.getElementById('stopRecordingBtn').addEventListener('click', stopRecording);
@@ -100,16 +101,46 @@
 
         function saveVideo() {
             const blob = new Blob(chunks, { type: 'video/webm' });
-            const fileName = `ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`;
+            const fileName = `ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
             const savePath = `/ToxDetect backup/${fileName}`; // Chemin Dropbox
-            
+
+            // 1️⃣ Télécharger localement
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = fileName;
+            a.download = fileName;  // Pas de chemin absolu ici !
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            alert("Vidéo sauvegardée avec succès dans ToxDetect Backup !");
+            alert("Vidéo sauvegardée localement !");
+
+            // 2️⃣ Envoyer sur Dropbox
+            uploadToDropbox(blob, savePath);
+        }
+
+        function uploadToDropbox(blob, savePath) {
+            fetch('https://content.dropboxapi.com/2/files/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                    'Content-Type': 'application/octet-stream',
+                    'Dropbox-API-Arg': JSON.stringify({
+                        path: savePath,
+                        mode: 'add',
+                        autorename: true,
+                        mute: false
+                    })
+                },
+                body: blob
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Upload réussi :", data);
+                alert("Vidéo sauvegardée sur Dropbox !");
+            })
+            .catch(error => {
+                console.error("Erreur lors de l'upload Dropbox :", error);
+                alert("Erreur lors de l'envoi vers Dropbox.");
+            });
         }
 
         function closeVideo() {
