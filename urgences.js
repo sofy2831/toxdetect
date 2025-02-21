@@ -23,10 +23,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const contactBadge = document.createElement("span");
                 contactBadge.classList.add("contact-badge");
                 contactBadge.innerHTML = contact + ' <button class="remove-btn">🗑️</button>';
-                contactBadge.style.cursor = "pointer";
-                contactBadge.onclick = function () {
+
+                // Ajoute un event listener au bouton de suppression
+                const removeBtn = contactBadge.querySelector(".remove-btn");
+                removeBtn.addEventListener("click", function () {
                     removeContact(contact);
-                };
+                });
+
                 selectedContactsDiv.appendChild(contactBadge);
             });
         } else {
@@ -122,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.sendEmergency = function () {
+        console.log("Bouton Urgence cliqué !");
         getLocation(function (location) {
             const emergencyMessage = "🚨 URGENCE ! J'ai besoin d'aide immédiatement !\n" + location;
             alert("Urgence envoyée aux autorités !\n" + emergencyMessage);
