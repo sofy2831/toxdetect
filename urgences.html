@@ -36,7 +36,12 @@
             background-color: #f1f1f1;
             border-radius: 5px;
         }
-        .remove-btn {
+            #selectedMessage {
+            margin-top: 15px; /* Augmente l'écart */
+            font-weight: bold; /* Pour le rendre plus visible */
+}
+
+            .remove-btn {
             background: none;
             border: none;
             cursor: pointer;
@@ -99,7 +104,7 @@
                 <option value="Je me sens menacé(e), aidez-moi">Je me sens menacé(e), aidez-moi</option>
                 <option value="other">Autre</option>
             </select>
-
+<br>
             <div id="selectedMessage"></div>
 
             <textarea id="customMessage" style="display:none;" placeholder="Écrivez votre message ici..."></textarea>
