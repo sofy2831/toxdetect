@@ -3,167 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journal</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        .question {
-            margin: 20px 0;
-        }
-        button {     
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .media-container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 5px;
-        }
-        .media-section {
-            width: 45%;
-        }
-        textarea {
-            width: 80%;
-            height: 60px;
-            font-size: 16px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            resize: none;
-        }
-        #selectedFiles {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-        }
-        #fileSavedMessage {
-            color: green;
-            font-weight: bold;
-        }
-        .media-btn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .media-btn:hover {
-            background-color: #218838;
-        }
-    </style>
-    <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+    <title>Journal ToxDetect</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/10.34.0/Dropbox-sdk.min.js"></script>
 </head>
 <body>
-    <h1>Journal</h1>
+    <header>
+        <h1>Mon Journal</h1>
+        <button id="back-home" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+    </header>
 
-    <h2>Connexion à Dropbox</h2>
-    <p id="dropbox-message">ℹ️ Vous devez être connecté à votre Dropbox pour retrouver vos fichiers.</p>
+    <main>
+        <section>
+            <h2 id="dateDisplay"></h2>
+            <textarea id="journalEntry" placeholder="Écrivez votre journal ici..."></textarea>
+            <button id="save-journal">Enregistrer sur Dropbox</button>
+        </section>
 
-    <button id="connect-dropbox">Connexion à Dropbox</button>
-    <p id="dropbox-status">❌ Non connecté à Dropbox</p>
-    <button id="logout-button" style="display: none;">Déconnexion</button>
-    <button id="ma-dropbox-btn" style="display: none;">Accéder à mes fichiers Dropbox</button>
-    
-    <p id="dateDisplay"></p>
+        <section>
+            <h2>Importer un fichier</h2>
+            <input type="file" id="fileUpload" multiple>
+            <button id="save-file">Enregistrer le fichier</button>
+        </section>
 
-    <h2>Mon journal de bord</h2>   
-    <textarea id="journalEntry" placeholder="Écrivez votre journal ici..."></textarea>
-    <br>
-    <button id="save-journal">Enregistrer mon journal</button>
-
-    <h2>Fichiers à télécharger</h2>     
-    <label for="fileUpload">Téléverser des fichiers :</label>
-    <input type="file" id="fileUpload" accept="image/*,application/pdf" multiple>
-    <p id="selectedFiles"></p>
-    <button id="save-file">Enregistrer mon fichier</button>
-
-    <h2>Vidéos et Audio d'urgence</h2>
-    <p>ℹ️ Une preuve vaut mieux que mille mots : enregistrez, filmez, protégez-vous !.</p>
-    <div class="media-container">
-        <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='videos.html'">Vidéo</button>
-        </div>
-        <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='audios.html'">Audio</button>
-        </div>
-    </div>
-
-    <h2>Synthèse d’analyse</h2>
-    <p>Avant de générer votre document, prenez un instant pour structurer les faits...</p>
-    <button id="generateButton">Générer un document Word</button>
+        <section>
+            <h2>Connexion Dropbox</h2>
+            <button id="connect-dropbox">Se connecter à Dropbox</button>
+        </section>
+    </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            console.log("Page chargée.");
-            afficherDate();
-            getDropboxAccessToken();
-        });
-
-        function afficherDate() {
+            const dateDisplay = document.getElementById("dateDisplay");
             const date = new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('dateDisplay').textContent = `Date du jour : ${date}`;
+            dateDisplay.textContent = `Date du jour : ${date}`;
+        });
+
+        function extractAccessToken() {
+            const params = new URLSearchParams(window.location.hash.substring(1));
+            const token = params.get("access_token");
+
+            if (token) {
+                localStorage.setItem("dropboxToken", token);
+                alert("Connexion Dropbox réussie !");
+                window.location.href = "journal.html";
+            }
         }
 
-        function getDropboxAccessToken() {
-            const token = localStorage.getItem("dropbox_token");
-            const status = document.getElementById("dropbox-status");
-            document.getElementById("logout-button").style.display = token ? "block" : "none";
-            document.getElementById("ma-dropbox-btn").style.display = token ? "block" : "none";
-            status.innerHTML = token ? "✅ Connecté à Dropbox" : "❌ Non connecté à Dropbox";
-        }
-
-        document.getElementById("connect-dropbox").addEventListener("click", () => {
-            const APP_KEY = "0z41GO683A6XB20";
-            const REDIRECT_URI = "https://sofy2831.github.io/toxdetect/auth.html";
-            window.location.href = `https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=${APP_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-        });
-
-        document.getElementById("logout-button").addEventListener("click", () => {
-            localStorage.removeItem("dropbox_token");
-            alert("Vous avez été déconnecté de Dropbox.");
-            location.reload();
-        });
-
-        document.getElementById("fileUpload").addEventListener("change", () => {
-            const files = Array.from(document.getElementById("fileUpload").files).map(file => file.name).join("<br>") || "Aucun fichier sélectionné.";
-            document.getElementById("selectedFiles").innerHTML = files;
-        });
-
-        document.getElementById("generateButton").addEventListener("click", () => {
-            import("https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js").then(docx => {
-                const { Document, Packer, Paragraph, TextRun } = docx;
-                const doc = new Document({
-                    sections: [{
-                        children: [
-                            new Paragraph(new TextRun("Bienvenue sur ToxDetect.")),
-                            new Paragraph(new TextRun("Récit des faits..."))
-                        ]
-                    }]
-                });
-
-                Packer.toBlob(doc).then(blob => {
-                    const link = document.createElement("a");
-                    link.href = URL.createObjectURL(blob);
-                    link.download = "rapport.docx";
-                    link.click();
-                });
-            });
-        });
+        window.onload = extractAccessToken;
     </script>
+
+    <!-- Script pour Word -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script>
+        Office.onReady(() => {
+            console.log("Word prêt !");
+        });
+
+        function insertTextInWord() {
+            Word.run(context => {
+                const body = context.document.body;
+                body.insertText("Mon journal ToxDetect", Word.InsertLocation.end);
+                return context.sync();
+            }).catch(error => console.error("Erreur Word :", error));
+        }
+    </script>
+
+    <button onclick="insertTextInWord()">Insérer dans Word</button>
 </body>
 </html>
