@@ -93,7 +93,8 @@
 
         <div class="section">
             <label for="predefinedMessage">Message pré-enregistré :</label>
-            <select id="predefinedMessage" onchange="checkOtherOption()">
+            <select id="predefinedMessage" onchange="updateSelectedMessage()">
+                <div id="selectedMessage"></div>
                 <option value="J’ai besoin d’aide, prévenir les autorités.">J’ai besoin d’aide, prévenir les autorités.</option>
                 <option value="Je suis en danger, j’ai besoin d’aide immédiatement.">Je suis en danger, j’ai besoin d’aide immédiatement.</option>
                 <option value="Je me sens menacé(e), aidez-moi">Je me sens menacé(e), aidez-moi</option>
