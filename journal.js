@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
        
-        const fileName = `backup/journal-${new Date().toISOString().split("T")[0]}.txt`;
+        const fileName = `toxdetect backup/journal-${new Date().toISOString().split("T")[0]}.txt`;
 
         dbx.filesUpload({ path: `/${fileName}`, contents: noteTexte, mode: 'overwrite' })
             .then(() => {
