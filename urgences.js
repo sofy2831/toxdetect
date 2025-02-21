@@ -62,9 +62,12 @@ function updateSelectedMessage() {
 
 function sendAlert() {
     let contacts = document.querySelectorAll(".contact-badge");
+    let selectedMessage = document.getElementById("predefinedMessage").value;
     let message = document.getElementById("predefinedMessage").value;
     let customMessage = document.getElementById("customMessage").value;
 
+    }
+    
     if (message === "other" && customMessage.trim() === "") {
         alert("Veuillez entrer un message personnalisé.");
         return;
@@ -76,6 +79,38 @@ function sendAlert() {
         alert("Veuillez ajouter au moins un contact.");
         return;
     }
+ // Vérifier le message (pré-enregistré ou personnalisé)
+    let finalMessage = selectedMessage === "other" ? customMessage : selectedMessage;
+    if (!finalMessage) {
+        alert("Veuillez saisir un message d’alerte.");
+        return;
+    }
+
+    // Récupérer la localisation de l'utilisateur
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+
+                let contactNumbers = Array.from(contacts).map(contact => contact.dataset.number);
+                let alertMessage = `🚨 Alerte envoyée à : ${contactNumbers.join(", ")}\n\n📩 Message : ${finalMessage}\n\n📍 Localisation : https://www.google.com/maps?q=${latitude},${longitude}`;
+                
+                alert(alertMessage); // Affiche l'alerte avec les infos
+
+                console.log(alertMessage); // Log dans la console
+
+                // Ici, tu pourrais ajouter un envoi réel via une API SMS/Email si nécessaire.
+            },
+            function (error) {
+                alert("Erreur lors de la récupération de la localisation : " + error.message);
+            }
+        );
+    } else {
+        alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+    }
+}
+
 
     let contactNumbers = Array.from(contacts).map(contact => contact.getAttribute("data-value"));
 
