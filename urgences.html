@@ -3,37 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alerte Urgence</title>
+    <title>Urgences</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Application d'Urgence</h1>
+    <h1>Urgences</h1>
 
-    <label for="contacts">Sélectionnez un contact :</label>
-    <select id="contacts">
-        <option value="">-- Choisissez --</option>
-        <option value="Alice">Alice</option>
-        <option value="Bob">Bob</option>
-        <option value="Charlie">Charlie</option>
-    </select>
-    <button onclick="addContact()">Ajouter</button>
+    <h3>Contacts d'urgence</h3>
+    <div id="selectedContacts">Aucun contact sélectionné</div>
 
-    <h3>Contacts sélectionnés :</h3>
-    <div id="selectedContacts">Aucun contact sélectionné.</div>
+    <button class="blue-button" onclick="openContactSelection()">Sélectionner des contacts</button>
 
-    <h3>Choisissez un message :</h3>
-    <select id="predefinedMessage" onchange="checkOtherOption()">
-        <option value="Je suis en danger, contactez-moi !">Je suis en danger, contactez-moi !</option>
-        <option value="Appelez la police immédiatement !">Appelez la police immédiatement !</option>
-        <option value="other">Autre...</option>
-    </select>
-    <textarea id="customMessage" placeholder="Écrivez votre message..." style="display: none;"></textarea>
+    <h3>Message d'alerte</h3>
+    <textarea id="alertMessage" placeholder="Entrez votre message ici..."></textarea>
 
     <h3>Message sélectionné :</h3>
-    <div id="selectedMessage"></div>
+    <div id="selectedMessage">Aucun message sélectionné</div>
 
-    <button onclick="sendAlert()">Envoyer Alerte</button>
-    <button onclick="sendEmergency()">Envoyer Urgence 🚨</button>
+    <button class="blue-button" onclick="sendAlert()">Envoyer une alerte</button>
+    <button class="blue-button" onclick="sendEmergency()">Envoyer une urgence 🚨</button>
 
     <script src="urgences.js"></script>
 </body>
