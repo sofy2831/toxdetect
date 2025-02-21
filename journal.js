@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Array.from(fichiers).forEach(fichier => {
             const reader = new FileReader();
             reader.onload = () => {
-                dbx.filesUpload({ path: `/backup/${fichier.name}`, contents: reader.result, mode: 'overwrite' })
+                dbx.filesUpload({ path: `/toxdetect backup/${fichier.name}`, contents: reader.result, mode: 'overwrite' })
                     .then(() => {
                         alert(`Fichier ${fichier.name} enregistré avec succès sur Dropbox !`);
                         document.getElementById("fileUpload").value = "";
