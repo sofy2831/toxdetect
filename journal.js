@@ -1,6 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Page Journal chargée.");
+    
+console.log("Script chargé !");
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOM complètement chargé !");
+    console.log(document.getElementById("save-journal"));
+});
 
+    
     // Affichage de la date du jour
     function afficherDate() {
         const date = new Date();
