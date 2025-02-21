@@ -101,18 +101,17 @@
 
         function saveVideo() {
             const blob = new Blob(chunks, { type: 'video/webm' });
-            const fileName = `ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
+            const fileName = `video_urgence_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
             const savePath = `/ToxDetect backup/${fileName}`; // Chemin Dropbox
 
             // 1️⃣ Télécharger localement
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = fileName;  // Pas de chemin absolu ici !
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-           
-
+            
             // 2️⃣ Envoyer sur Dropbox
             uploadToDropbox(blob, savePath);
         }
