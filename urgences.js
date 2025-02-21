@@ -96,7 +96,7 @@ function sendEmergency() {
                 let latitude = position.coords.latitude;
                 let longitude = position.coords.longitude;
 
-                let emergencyMessage = `🚨 Urgence ! Appel des services d'urgence en cours...\n\n📍 Localisation : https://www.google.com/maps?q=${latitude},${longitude}`;
+                let emergencyMessage = `🚨 Urgence ! Appel des services d'urgence avec votre géolocalistion en cours...\n\n📍 Localisation : https://www.google.com/maps?q=${latitude},${longitude}`;
                 
                 alert(emergencyMessage); // Affiche un message d'urgence avec la localisation
                 console.log(emergencyMessage); // Log pour test
