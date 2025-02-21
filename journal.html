@@ -32,43 +32,7 @@
         </section>
     </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const dateDisplay = document.getElementById("dateDisplay");
-            const date = new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
-            dateDisplay.textContent = `Date du jour : ${date}`;
-        });
-
-        function extractAccessToken() {
-            const params = new URLSearchParams(window.location.hash.substring(1));
-            const token = params.get("access_token");
-
-            if (token) {
-                localStorage.setItem("dropboxToken", token);
-                alert("Connexion Dropbox réussie !");
-                window.location.href = "journal.html";
-            }
-        }
-
-        window.onload = extractAccessToken;
-    </script>
-
-    <!-- Script pour Word -->
-    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-    <script>
-        Office.onReady(() => {
-            console.log("Word prêt !");
-        });
-
-        function insertTextInWord() {
-            Word.run(context => {
-                const body = context.document.body;
-                body.insertText("Mon journal ToxDetect", Word.InsertLocation.end);
-                return context.sync();
-            }).catch(error => console.error("Erreur Word :", error));
-        }
-    </script>
-
-    <button onclick="insertTextInWord()">Insérer dans Word</button>
+    <script src="journal.js"></script>
 </body>
 </html>
+
