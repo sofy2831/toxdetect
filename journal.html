@@ -133,7 +133,73 @@
     <textarea id="journalEntry" placeholder="Écrivez votre journal ici..."></textarea>
     <br>
     <button id="save-journal">Enregistrer mon journal</button>
+<script>
+    async function saveJournalToDropbox() {
+        const token = localStorage.getItem("dropbox_token");
+        if (!token) {
+            alert("Vous devez être connecté à Dropbox pour enregistrer votre journal.");
+            return;
+        }
+        
+        const journalText = document.getElementById("journalEntry").value;
+        if (!journalText.trim()) {
+            alert("Votre journal est vide. Veuillez écrire quelque chose avant d'enregistrer.");
+            return;
+        }
+        
+        const date = new Date();
+        const timestamp = date.toISOString().replace(/[:.]/g, "-");
+        const fileName = `Journal_${timestamp}.txt`;
+        
+        const fileContent = new Blob([journalText], { type: "text/plain" });
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(fileContent);
+        reader.onload = async function() {
+            const fileData = reader.result;
+            try {
+                const response = await fetch("https://content.dropboxapi.com/2/files/upload", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Dropbox-API-Arg": JSON.stringify({
+                            path: `/Applications/ToxDetect Backup/${fileName}`,
+                            mode: "add",
+                            autorename: true,
+                            mute: false
+                        }),
+                        "Content-Type": "application/octet-stream"
+                    },
+                    body: fileData
+                });
+                
+                if (response.ok) {
+                    alert("Journal enregistré avec succès sur Dropbox!");
+                } else {
+                    alert("Échec de l'enregistrement sur Dropbox.");
+                }
+            } catch (error) {
+                alert("Erreur lors de l'enregistrement : " + error.message);
+            }
+        };
+    }
+    
+    document.getElementById("save-journal").addEventListener("click", saveJournalToDropbox);
+</script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <h2>Fichiers à télécharger</h2>     
     <label for="fileUpload">Téléverser des fichiers :</label>
     <input type="file" id="fileUpload" accept="image/*,application/pdf" multiple onchange="displaySelectedFiles()">
