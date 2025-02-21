@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
     let lastMessage = localStorage.getItem("lastMessage") || "";
     updateContactsDisplay();
-    updateMessageDisplay();
+    updateMessageDisplay(lastMessage);
 
     window.addContact = function () {
         const contactSelect = document.getElementById("contacts");
@@ -20,17 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (selectedContacts.length > 0) {
             selectedContacts.forEach(contact => {
-                const contactItem = document.createElement("div");
-                contactItem.innerText = contact;
-
-                const removeButton = document.createElement("button");
-                removeButton.innerText = "❌";
-                removeButton.onclick = function () {
+                const contactBadge = document.createElement("span");
+                contactBadge.classList.add("contact-badge");
+                contactBadge.innerText = contact + " ✖";
+                contactBadge.style.cursor = "pointer";
+                contactBadge.onclick = function () {
                     removeContact(contact);
                 };
-
-                contactItem.appendChild(removeButton);
-                selectedContactsDiv.appendChild(contactItem);
+                selectedContactsDiv.appendChild(contactBadge);
             });
         } else {
             selectedContactsDiv.innerText = "Aucun contact sélectionné.";
@@ -60,23 +57,23 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             customMessageTextarea.style.display = "none";
             selectedMessageDiv.innerText = "Message : " + predefinedMessageSelect.value;
+            localStorage.setItem("lastMessage", predefinedMessageSelect.value);
         }
     };
 
     function getLocation(callback) {
-        const loadingIndicator = document.getElementById("loadingIndicator");
-        loadingIndicator.style.display = "block";
-
+        const locationIndicator = document.getElementById("locationIndicator");
+        locationIndicator.innerText = "Localisation en cours...";
+        
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
-                    loadingIndicator.style.display = "none";
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
+                    locationIndicator.innerText = "Localisation obtenue";
                     callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
                 },
                 function (error) {
-                    loadingIndicator.style.display = "none";
                     let errorMessage = "Localisation non disponible";
                     if (error.code === 1) {
                         errorMessage = "Accès à la localisation refusé";
@@ -85,11 +82,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     } else if (error.code === 3) {
                         errorMessage = "Délai d'attente dépassé";
                     }
+                    locationIndicator.innerText = errorMessage;
                     callback(errorMessage);
                 }
             );
         } else {
-            loadingIndicator.style.display = "none";
+            locationIndicator.innerText = "Localisation non supportée";
             callback("Localisation non disponible");
         }
     }
@@ -119,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
         getLocation(function (location) {
             const fullMessage = `${message}\n${location}`;
             document.getElementById("selectedMessage").innerText = "Message : " + fullMessage;
-            localStorage.setItem("lastMessage", fullMessage);
             alert("Alerte envoyée à : " + selectedContacts.join(", ") + "\nMessage : " + fullMessage);
         });
     };
@@ -131,8 +128,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     };
 
-    function updateMessageDisplay() {
-        const selectedMessageDiv = document.getElementById("selectedMessage");
-        selectedMessageDiv.innerText = "Message : " + lastMessage;
+    function updateMessageDisplay(message) {
+        if (message) {
+            document.getElementById("selectedMessage").innerText = "Message : " + message;
+        }
     }
 });
