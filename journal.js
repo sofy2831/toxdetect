@@ -9,6 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     afficherDate();
+    
+document.getElementById("save-journal").addEventListener("click", function() {
+    const noteTexte = document.getElementById("journalEntry").value;
+    
+    if (!noteTexte) {
+        alert("Veuillez écrire quelque chose avant d'enregistrer.");
+        return;
+    }
+
+    saveJournalToDropbox(noteTexte);
+});
+
+    
 
     // Configuration Dropbox
     const dropboxAppKey = "0z41GO683A6XB20"; 
@@ -36,6 +49,30 @@ document.addEventListener("DOMContentLoaded", () => {
         return null;
     }
 }
+function saveJournalToDropbox(noteTexte) {
+    console.log("Envoi du journal à Dropbox :", noteTexte);
+
+    let dbx = getDropboxClient();
+    if (!dbx) return;
+
+    const fileName = `Journal_${new Date().toISOString().split('T')[0]}.txt`;
+    const fileContent = new Blob([noteTexte], { type: "text/plain" });
+
+    fileContent.arrayBuffer().then(buffer => {
+        dbx.filesUpload({
+            path: `/ToxDetect Backup/${fileName}`,
+            contents: buffer,
+            mode: { ".tag": "overwrite" }
+        }).then(response => {
+            alert("Journal enregistré avec succès sur Dropbox !");
+            console.log("Réponse Dropbox :", response);
+        }).catch(error => {
+            console.error("Erreur lors de l’enregistrement :", error);
+            alert("Erreur lors de l'enregistrement sur Dropbox.");
+        });
+    });
+}
+    
     function saveJournalToDropbox(noteTexte) {
        console.log("Envoi du journal à Dropbox :", noteTexte);
         const dbx = getDropboxClient();
