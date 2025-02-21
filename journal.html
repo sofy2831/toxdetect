@@ -202,7 +202,7 @@
             return;
         }
 
-        const fileInput = document.getElementById("fileInput");
+       const fileInput = document.getElementById("fileUpload"); // Correction ici
         if (!fileInput.files.length) {
             alert("Veuillez sélectionner un fichier avant d'enregistrer.");
             return;
@@ -213,7 +213,7 @@
         // Génération du timestamp pour nom unique
         const date = new Date();
         const timestamp = date.toISOString().replace(/[:.]/g, "-").replace("T", "_").split("Z")[0];
-        const fileName = `Backup_${timestamp}_${file.name}`;
+        const fileName = `toxdetect Backup_${timestamp}_${file.name}`;
 
         const reader = new FileReader();
         reader.readAsArrayBuffer(file);
