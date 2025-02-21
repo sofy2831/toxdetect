@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
     let lastMessage = localStorage.getItem("lastMessage") || "";
     updateContactsDisplay();
-    document.getElementById("customMessage").value = lastMessage;
+    updateMessageDisplay();
 
     window.addContact = function () {
         const contactSelect = document.getElementById("contacts");
@@ -20,23 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (selectedContacts.length > 0) {
             selectedContacts.forEach(contact => {
-                const contactWrapper = document.createElement("div");
-                contactWrapper.classList.add("contact-item");
-                
-                const contactBadge = document.createElement("span");
-                contactBadge.classList.add("contact-badge");
-                contactBadge.innerText = contact;
-                
+                const contactItem = document.createElement("div");
+                contactItem.innerText = contact;
+
                 const removeButton = document.createElement("button");
                 removeButton.innerText = "❌";
-                removeButton.classList.add("remove-btn");
                 removeButton.onclick = function () {
                     removeContact(contact);
                 };
-                
-                contactWrapper.appendChild(contactBadge);
-                contactWrapper.appendChild(removeButton);
-                selectedContactsDiv.appendChild(contactWrapper);
+
+                contactItem.appendChild(removeButton);
+                selectedContactsDiv.appendChild(contactItem);
             });
         } else {
             selectedContactsDiv.innerText = "Aucun contact sélectionné.";
@@ -50,11 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.resetContacts = function () {
-        if (confirm("Voulez-vous vraiment réinitialiser la liste des contacts ?")) {
-            selectedContacts = [];
-            localStorage.removeItem("selectedContacts");
-            updateContactsDisplay();
-        }
+        selectedContacts = [];
+        localStorage.removeItem("selectedContacts");
+        updateContactsDisplay();
     };
 
     window.checkOtherOption = function () {
@@ -74,13 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function getLocation(callback) {
         const loadingIndicator = document.getElementById("loadingIndicator");
         loadingIndicator.style.display = "block";
-        
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
+                    loadingIndicator.style.display = "none";
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    loadingIndicator.style.display = "none";
                     callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
                 },
                 function (error) {
@@ -107,8 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (message === "other") {
             message = document.getElementById("customMessage").value.trim();
         }
-        
-        localStorage.setItem("lastMessage", message);
 
         selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
 
@@ -129,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         getLocation(function (location) {
             const fullMessage = `${message}\n${location}`;
             document.getElementById("selectedMessage").innerText = "Message : " + fullMessage;
+            localStorage.setItem("lastMessage", fullMessage);
             alert("Alerte envoyée à : " + selectedContacts.join(", ") + "\nMessage : " + fullMessage);
         });
     };
@@ -139,4 +130,9 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Urgence envoyée aux autorités !\n" + emergencyMessage);
         });
     };
+
+    function updateMessageDisplay() {
+        const selectedMessageDiv = document.getElementById("selectedMessage");
+        selectedMessageDiv.innerText = "Message : " + lastMessage;
+    }
 });
