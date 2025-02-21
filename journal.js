@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Affichage de la date du jour
     function afficherDate() {
         const date = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('dateDisplay').textContent = `Date du jour : ${date.toLocaleDateString('fr-FR', options)}`;
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        document.getElementById("dateDisplay").textContent = `Date du jour : ${date.toLocaleDateString("fr-FR", options)}`;
     }
 
     afficherDate();
@@ -33,15 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-      document.getElementById("connect-dropbox").addEventListener("click", connectToDropbox);
+    document.getElementById("connect-dropbox").addEventListener("click", connectToDropbox);
 
+    // Bouton pour consulter Dropbox
     const consultDropboxButton = document.createElement("button");
     consultDropboxButton.textContent = "Consulter ma Dropbox";
     consultDropboxButton.classList.add("icon-button");
     consultDropboxButton.onclick = () => {
         const dbx = getDropboxClient();
         if (dbx) {
-            dbx.filesListFolder({ path: '/ToxDetect Backup' })
+            dbx.filesListFolder({ path: "/ToxDetect Backup" })
                 .then(response => {
                     alert("Fichiers dans votre Dropbox : " + response.entries.map(entry => entry.name).join(", "));
                 })
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(consultDropboxButton);
 });
 
+// Extraction du token d'accès Dropbox
 function extractAccessToken() {
     const params = new URLSearchParams(window.location.hash.substring(1));
     const token = params.get("access_token");
