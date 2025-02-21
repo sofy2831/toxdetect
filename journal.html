@@ -174,7 +174,7 @@
                 
                 if (response.ok) {
                     alert("Journal enregistré avec succès sur Dropbox!");
-                    
+                    document.getElementById("journalEntry").value = ""; // Réinitialisation ici
                     
                 } else {
                     alert("Échec de l'enregistrement sur Dropbox.");
@@ -184,8 +184,7 @@
             }
         };
     }
-    document.getElementById("fichierEntry").value = "";
-    document.getElementById("save-journal").addEventListener("click", saveJournalToDropbox);
+       document.getElementById("save-journal").addEventListener("click", saveJournalToDropbox);
 </script>
    
     <h2>Fichiers à télécharger</h2>     
