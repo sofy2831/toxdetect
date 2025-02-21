@@ -33,45 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-   
-
-    function saveFilesToDropbox(fichiers) {
-        const dbx = getDropboxClient();
-        if (!dbx) return;
-
-        Array.from(fichiers).forEach(fichier => {
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(fichier);
-            reader.onload = () => {
-                dbx.filesUpload({ path: `/ToxDetect Backup/${fichier.name}`, contents: reader.result, mode: { ".tag": "overwrite" } })
-                    .then(() => {
-                        alert(`Fichier ${fichier.name} enregistré avec succès sur Dropbox !`);
-                        document.getElementById("fileUpload").value = "";
-                    })
-                    .catch(err => alert("Erreur Dropbox : " + err.message));
-            };
-        });
-    }
-
-    document.getElementById("save-journal").addEventListener("click", () => {
-        const noteTexte = document.getElementById("journalEntry").value.trim();
-        if (noteTexte !== "") {
-            saveJournalToDropbox(noteTexte);
-        } else {
-            alert("Veuillez écrire quelque chose avant d'enregistrer.");
-        }
-    });
-
-    document.getElementById("save-file").addEventListener("click", () => {
-        const fichiers = document.getElementById("fileUpload").files;
-        if (fichiers.length === 0) {
-            alert("Aucun fichier sélectionné.");
-            return;
-        }
-        saveFilesToDropbox(fichiers);
-    });
-
-    document.getElementById("connect-dropbox").addEventListener("click", connectToDropbox);
+      document.getElementById("connect-dropbox").addEventListener("click", connectToDropbox);
 
     const consultDropboxButton = document.createElement("button");
     consultDropboxButton.textContent = "Consulter ma Dropbox";
