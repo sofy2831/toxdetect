@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -9,56 +9,52 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 1px;
+            margin: 10px;
         }
         .container {
-             width: 90%;
+            width: 90%;
             max-width: 1000px;
             margin: 0 auto;
-
+        }
+        .section {
+            margin-bottom: 30px; /* Augmente l'espacement entre les sections */
+            padding: 15px; /* Ajoute de l'espace interne */
+            border-radius: 5px;
         }
         .button-container {
             display: flex;
-            flex-direction: column; /* Aligne les boutons en colonne */
-            justify-content: center; /* Centre les boutons verticalement */
-            align-items: center; /* Centre les boutons horizontalement */
-            gap: 10px; /* Espacement entre les boutons */
-            margin-top: 20px; /* Espacement au-dessus des boutons */
-}
-        .section {
-             margin-bottom: 20px; /* Augmente l'écart entre les sections */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* Augmente l'espace entre les boutons */
+            margin-top: 30px; 
         }
         .contact-badge {
-    display: block; /* Chaque contact sera sur une nouvelle ligne */
-    margin-bottom: 5px; /* Espacement entre chaque contact */
-    padding: 5px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-}
-
-.remove-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    font-size: 14px;
-}
-
-.urgence-container {
-    width: 100%;
-    max-width: 500px; /* Ajuste selon tes besoins */
-    margin: 0 auto; /* Centre le contenu */
-    text-align: center; /* Centre le texte */
-}
-
-body {
-    overflow-x: hidden;
-}
-   
-        
+            display: block;
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: red;
+            font-size: 14px;
+        }
+        .urgence-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        body {
+            overflow-x: hidden;
+        }
         button {
             margin: 10px;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
             cursor: pointer;
             border: none;
@@ -78,53 +74,24 @@ body {
         .red-button:hover {
             background-color: #CC0000;
         }
-        .contact-badge {
-    display: block; /* Chaque contact sera sur une nouvelle ligne */
-    margin-bottom: 5px; /* Espacement entre chaque contact */
-    padding: 5px;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-}
-
-.remove-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    font-size: 14px;
-}
-
-.urgence-container {
-    width: 100%;
-    max-width: 500px; /* Ajuste selon tes besoins */
-    margin: 0 auto; /* Centre le contenu */
-    text-align: center; /* Centre le texte */
-}
-
-body {
-    overflow-x: hidden;
-}
-
-        
     </style>
 </head>
-<script src="https://sdk.twilio.com/js/client/v1.13/twilio.min.js"></script>
 
 <body>
-
     <div class="container">
         <div class="section">
             <h2>Contact</h2>
             <label for="contacts">Sélectionnez un contact :</label>
             <select id="contacts" onchange="addContact()">
                 <option value="">--Choisir--</option>
-              
                 <option value="+33612345678">Contact 1</option>
                 <option value="+33687654321">Contact 2</option>
                 <option value="+33611223344">Contact 3</option>
             </select>
-            <div class="selected-contacts" id="selectedContacts"></div>
+            <div id="selectedContacts"></div>
+        </div>
 
+        <div class="section">
             <label for="predefinedMessage">Message pré-enregistré :</label>
             <select id="predefinedMessage" onchange="checkOtherOption()">
                 <option value="J’ai besoin d’aide, prévenir les autorités.">J’ai besoin d’aide, prévenir les autorités.</option>
@@ -133,22 +100,22 @@ body {
                 <option value="other">Autre</option>
             </select>
             <textarea id="customMessage" style="display:none;" placeholder="Écrivez votre message ici..."></textarea>
-            <div class="selected-message" id="selectedMessage"></div>
-            <br>
+            <div id="selectedMessage"></div>
+        </div>
+
+        <div class="section">
             <button class="blue-button" onclick="sendAlert()">Alerte</button>
         </div>
 
         <div class="section">
             <button class="red-button" onclick="sendEmergency()">Urgences</button>
         </div>
+
         <div class="button-container">
             <button class="blue-button" onclick="window.location.href='index.html';">Retour à l'accueil</button>
         </div>
     </div>
-        
-    </script>
-    <script src="urgences.js"></script>
 
+    <script src="urgences.js"></script>
 </body>
 </html>
-
