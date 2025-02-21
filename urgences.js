@@ -1,25 +1,41 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let selectedContacts = [];
+    let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
+    updateContactsDisplay();
 
-    // Ajoute un contact à la liste
     window.addContact = function () {
         const contactSelect = document.getElementById("contacts");
         let contact = contactSelect.value;
         if (contact && !selectedContacts.includes(contact)) {
             selectedContacts.push(contact);
+            localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
             updateContactsDisplay();
         }
     };
 
-    // Met à jour l'affichage des contacts sélectionnés
     function updateContactsDisplay() {
         const selectedContactsDiv = document.getElementById("selectedContacts");
-        selectedContactsDiv.innerHTML = selectedContacts.length > 0 
-            ? "Contacts : " + selectedContacts.join(", ") 
-            : "Aucun contact sélectionné.";
+        selectedContactsDiv.innerHTML = "";
+        if (selectedContacts.length > 0) {
+            selectedContacts.forEach(contact => {
+                const contactBadge = document.createElement("span");
+                contactBadge.classList.add("contact-badge");
+                contactBadge.innerText = contact;
+                contactBadge.onclick = function () {
+                    removeContact(contact);
+                };
+                selectedContactsDiv.appendChild(contactBadge);
+            });
+        } else {
+            selectedContactsDiv.innerText = "Aucun contact sélectionné.";
+        }
     }
 
-    // Vérifie si "Autre" est sélectionné et affiche le champ de texte
+    window.removeContact = function (contact) {
+        selectedContacts = selectedContacts.filter(c => c !== contact);
+        localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
+        updateContactsDisplay();
+    };
+
     window.checkOtherOption = function () {
         const predefinedMessageSelect = document.getElementById("predefinedMessage");
         const customMessageTextarea = document.getElementById("customMessage");
@@ -34,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // Récupération de la position GPS
     function getLocation(callback) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -44,7 +59,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
                 },
                 function (error) {
-                    callback("Localisation non disponible");
+                    let errorMessage = "Localisation non disponible";
+                    if (error.code === 1) {
+                        errorMessage = "Accès à la localisation refusé";
+                    } else if (error.code === 2) {
+                        errorMessage = "Impossible de récupérer la position";
+                    } else if (error.code === 3) {
+                        errorMessage = "Délai d'attente dépassé";
+                    }
+                    callback(errorMessage);
                 }
             );
         } else {
@@ -52,7 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Envoie l'alerte avec le message sélectionné et la position GPS
     window.sendAlert = function () {
         let message = document.getElementById("predefinedMessage").value;
         if (message === "other") {
@@ -69,6 +91,10 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         
+        if (!confirm("Voulez-vous vraiment envoyer cette alerte ?")) {
+            return;
+        }
+
         getLocation(function (location) {
             const fullMessage = `${message}\n${location}`;
             document.getElementById("selectedMessage").innerText = "Message : " + fullMessage;
@@ -76,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     };
 
-    // Envoie une alerte d'urgence aux autorités avec la position GPS
     window.sendEmergency = function () {
         getLocation(function (location) {
             const emergencyMessage = "🚨 URGENCE ! J'ai besoin d'aide immédiatement !\n" + location;
