@@ -33,24 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function saveJournalToDropbox(noteTexte) {
-        console.log("Envoi du journal à Dropbox :", noteTexte);
-        const dbx = getDropboxClient();
-
-        if (!dbx) return;
-
-        const fileName = `/ToxDetect Backup/Journal_${new Date().toISOString().split("T")[0]}.txt`;
-        dbx.filesUpload({ path: fileName, contents: noteTexte, mode: { ".tag": "overwrite" } })
-            .then(() => {
-                console.log("Enregistrement réussi !");
-                alert("Journal enregistré avec succès sur Dropbox !");
-                document.getElementById("journalEntry").value = "";
-            })
-            .catch(err => {
-                console.error("Erreur Dropbox :", err);
-                alert("Erreur Dropbox : " + err.message);
-            });
-    }
+   
 
     function saveFilesToDropbox(fichiers) {
         const dbx = getDropboxClient();
