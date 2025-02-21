@@ -43,6 +43,18 @@ function checkOtherOption() {
         customMessageTextarea.style.display = "none";
         customMessageTextarea.value = "";
     }
+function updateSelectedMessage() {
+    let predefinedMessage = document.getElementById("predefinedMessage").value;
+    let customMessageField = document.getElementById("customMessage");
+    let selectedMessageDiv = document.getElementById("selectedMessage");
+
+    if (predefinedMessage === "other") {
+        customMessageField.style.display = "block";
+        selectedMessageDiv.innerText = ""; // Efface l'ancien message si "Autre" est choisi
+    } else {
+        customMessageField.style.display = "none";
+        selectedMessageDiv.innerText = "Message sélectionné : " + predefinedMessage;
+    }
 }
 
 function sendAlert() {
