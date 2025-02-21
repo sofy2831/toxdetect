@@ -1,140 +1,72 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
-    let lastMessage = localStorage.getItem("lastMessage") || "";
-    updateContactsDisplay();
-    updateMessageDisplay(lastMessage);
-
-    window.addContact = function () {
-        const contactSelect = document.getElementById("contacts");
-        const contact = contactSelect.value;
-        if (contact && !selectedContacts.includes(contact)) {
-            selectedContacts.push(contact);
-            localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
-            updateContactsDisplay();
-        }
-    };
-
-    function updateContactsDisplay() {
-        const selectedContactsDiv = document.getElementById("selectedContacts");
-        selectedContactsDiv.innerHTML = "";
-
-        if (selectedContacts.length > 0) {
-            selectedContacts.forEach(contact => {
-                const contactBadge = document.createElement("span");
-                contactBadge.classList.add("contact-badge");
-                contactBadge.innerHTML = contact + ' <button class="remove-btn">🗑️</button>';
-
-                // Ajoute un event listener au bouton de suppression
-                const removeBtn = contactBadge.querySelector(".remove-btn");
-                removeBtn.addEventListener("click", function () {
-                    removeContact(contact);
-                });
-
-                selectedContactsDiv.appendChild(contactBadge);
-            });
-        } else {
-            selectedContactsDiv.innerText = "Aucun contact sélectionné.";
-        }
-    }
-
-    window.removeContact = function (contact) {
-        selectedContacts = selectedContacts.filter(c => c !== contact);
-        localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
-        updateContactsDisplay();
-    };
-
-    window.resetContacts = function () {
-        selectedContacts = [];
-        localStorage.removeItem("selectedContacts");
-        updateContactsDisplay();
-    };
-
-    window.checkOtherOption = function () {
-        const predefinedMessageSelect = document.getElementById("predefinedMessage");
-        const customMessageTextarea = document.getElementById("customMessage");
-        const selectedMessageDiv = document.getElementById("selectedMessage");
-
-        if (predefinedMessageSelect.value === "other") {
-            customMessageTextarea.style.display = "block";
-            selectedMessageDiv.innerText = "";
-        } else {
-            customMessageTextarea.style.display = "none";
-            selectedMessageDiv.innerText = "Message : " + predefinedMessageSelect.value;
-            localStorage.setItem("lastMessage", predefinedMessageSelect.value);
-        }
-    };
-
-    function getLocation(callback) {
-        const locationIndicator = document.getElementById("locationIndicator");
-        locationIndicator.innerText = "Localisation en cours...";
-        
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    locationIndicator.innerText = "Localisation obtenue";
-                    callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
-                },
-                function (error) {
-                    let errorMessage = "Localisation non disponible";
-                    if (error.code === 1) {
-                        errorMessage = "Accès à la localisation refusé";
-                    } else if (error.code === 2) {
-                        errorMessage = "Impossible de récupérer la position";
-                    } else if (error.code === 3) {
-                        errorMessage = "Délai d'attente dépassé";
-                    }
-                    locationIndicator.innerText = errorMessage;
-                    callback(errorMessage);
-                }
-            );
-        } else {
-            locationIndicator.innerText = "Localisation non supportée";
-            callback("Localisation non disponible");
-        }
-    }
-
-    window.sendAlert = function () {
-        let message = document.getElementById("predefinedMessage").value;
-        if (message === "other") {
-            message = document.getElementById("customMessage").value.trim();
-        }
-
-        selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
-
-        if (selectedContacts.length === 0) {
-            alert("Veuillez sélectionner au moins un contact.");
-            return;
-        }
-
-        if (!message) {
-            alert("Veuillez écrire un message.");
-            return;
-        }
-
-        if (!confirm("Voulez-vous vraiment envoyer cette alerte ?")) {
-            return;
-        }
-
-        getLocation(function (location) {
-            const fullMessage = `${message}\n${location}`;
-            document.getElementById("selectedMessage").innerText = "Message : " + fullMessage;
-            alert("Alerte envoyée à : " + selectedContacts.join(", ") + "\nMessage : " + fullMessage);
-        });
-    };
-
-    window.sendEmergency = function () {
-        console.log("Bouton Urgence cliqué !");
-        getLocation(function (location) {
-            const emergencyMessage = "🚨 URGENCE ! J'ai besoin d'aide immédiatement !\n" + location;
-            alert("Urgence envoyée aux autorités !\n" + emergencyMessage);
-        });
-    };
-
-    function updateMessageDisplay(message) {
-        if (message) {
-            document.getElementById("selectedMessage").innerText = "Message : " + message;
-        }
-    }
+    checkOtherOption();
 });
+
+function addContact() {
+    let contactsSelect = document.getElementById("contacts");
+    let selectedContactsDiv = document.getElementById("selectedContacts");
+
+    let selectedValue = contactsSelect.value;
+    let selectedText = contactsSelect.options[contactsSelect.selectedIndex].text;
+
+    if (selectedValue !== "") {
+        let existingContacts = selectedContactsDiv.getElementsByClassName("contact-badge");
+        for (let i = 0; i < existingContacts.length; i++) {
+            if (existingContacts[i].getAttribute("data-value") === selectedValue) {
+                return; // Contact déjà ajouté, on ne fait rien
+            }
+        }
+
+        let contactBadge = document.createElement("div");
+        contactBadge.classList.add("contact-badge");
+        contactBadge.setAttribute("data-value", selectedValue);
+        contactBadge.innerHTML = `${selectedText} (${selectedValue}) 
+            <button class="remove-btn" onclick="removeContact(this)">X</button>`;
+
+        selectedContactsDiv.appendChild(contactBadge);
+    }
+
+    contactsSelect.value = "";
+}
+
+function removeContact(button) {
+    button.parentElement.remove();
+}
+
+function checkOtherOption() {
+    let predefinedMessageSelect = document.getElementById("predefinedMessage");
+    let customMessageTextarea = document.getElementById("customMessage");
+
+    if (predefinedMessageSelect.value === "other") {
+        customMessageTextarea.style.display = "block";
+    } else {
+        customMessageTextarea.style.display = "none";
+        customMessageTextarea.value = "";
+    }
+}
+
+function sendAlert() {
+    let contacts = document.querySelectorAll(".contact-badge");
+    let message = document.getElementById("predefinedMessage").value;
+    let customMessage = document.getElementById("customMessage").value;
+
+    if (message === "other" && customMessage.trim() === "") {
+        alert("Veuillez entrer un message personnalisé.");
+        return;
+    }
+
+    let finalMessage = message === "other" ? customMessage : message;
+
+    if (contacts.length === 0) {
+        alert("Veuillez ajouter au moins un contact.");
+        return;
+    }
+
+    let contactNumbers = Array.from(contacts).map(contact => contact.getAttribute("data-value"));
+
+    alert("Message envoyé aux contacts :\n" + contactNumbers.join(", ") + "\n\nMessage : " + finalMessage);
+}
+
+function sendEmergency() {
+    alert("Appel des services d'urgence en cours...");
+}
