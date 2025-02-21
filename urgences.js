@@ -40,11 +40,11 @@ function checkOtherOption() {
     
     if (predefinedMessageSelect.value === "other") {
         customMessageTextarea.style.display = "block";
-        selectedMessageDiv.innerText = ""; // Efface l'ancien message si "Autre" est choisi
-        
+         selectedMessageDiv.innerText = ""; // Efface l'affichage précédent       
     } else {
         customMessageTextarea.style.display = "none";
-       selectedMessageDiv.innerText = "Message sélectionné : " + predefinedMessage;
+       selectedMessageDiv.innerText = "Message sélectionné : " + predefinedMessageSelect.value;
+        }
     }
 function updateSelectedMessage() {
     let predefinedMessage = document.getElementById("predefinedMessage").value;
