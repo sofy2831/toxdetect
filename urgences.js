@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addContact = function () {
         const contactSelect = document.getElementById("contacts");
-        let contact = contactSelect.value;
+        const contact = contactSelect.value;
         if (contact && !selectedContacts.includes(contact)) {
             selectedContacts.push(contact);
             localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateContactsDisplay() {
         const selectedContactsDiv = document.getElementById("selectedContacts");
         selectedContactsDiv.innerHTML = "";
+
         if (selectedContacts.length > 0) {
             selectedContacts.forEach(contact => {
                 const contactBadge = document.createElement("span");
@@ -78,19 +79,22 @@ document.addEventListener("DOMContentLoaded", function () {
     window.sendAlert = function () {
         let message = document.getElementById("predefinedMessage").value;
         if (message === "other") {
-            message = document.getElementById("customMessage").value;
+            message = document.getElementById("customMessage").value.trim();
         }
-        
+
+        // Correction : Vérification correcte des contacts sélectionnés
+        selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
+
         if (selectedContacts.length === 0) {
             alert("Veuillez sélectionner au moins un contact.");
             return;
         }
-        
-        if (!message.trim()) {
+
+        if (!message) {
             alert("Veuillez écrire un message.");
             return;
         }
-        
+
         if (!confirm("Voulez-vous vraiment envoyer cette alerte ?")) {
             return;
         }
