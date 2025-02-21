@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
        
         const fileName = `toxdetect backup/journal-${new Date().toISOString().split("T")[0]}.txt`;
 
-        dbx.filesUpload({ path: `/${fileName}`, contents: noteTexte, mode: 'overwrite' })
-            .then(() => {
+       dbx.filesUpload({ path: fileName, contents: noteTexte, mode: 'overwrite' })
+        .then(() => {
                 console.log("Enregistrement réussi !");
                 alert("Journal enregistré avec succès sur Dropbox !");
                 document.getElementById("journalEntry").value = "";
