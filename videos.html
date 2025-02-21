@@ -57,10 +57,9 @@
                 videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 document.getElementById('videoPlayer').srcObject = videoStream;
                 
-                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/webm' }); // Format WebM pour compatibilité
+                mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/webm' });
                 mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
                 mediaRecorder.onstop = saveVideo;
-
                 mediaRecorder.start();
                 isRecording = true;
                 
@@ -100,48 +99,15 @@
         }
 
         function saveVideo() {
-            const blob = new Blob(chunks, { type: 'video/webm' }); // Format WebM
-            console.log("Blob généré :", blob);
-            uploadVideoToDropbox(blob);
-        }
-
-        async function uploadVideoToDropbox(blob) {
-            const ACCESS_TOKEN = 'sl.u.AFiZ2WwbdpLJsvc7zd0IKzv4EPKR7snLI_ojfQSA3TFD6sR5-BYAC3s_yFYykAx2e35baX4Ov3UCy8PF1s4fplrg1K_wI32JwBYako1aIOqi2S_s8H3FPtZMenxlO5ewZ_sSRSPbTQq2LMubkUnPkWdDz1VuxQ58Nkq3hS5SZ1rmjlCwp44F4JnuBwh0QrgHJgu63KTKikwiBlTA0ynmeU1HjwcvBSSrjP5hZqaCZhkk6adT-kcvjZiEgOy5qSYIFeNtMRQ02-gCSBUaqT9BISf5-sJaFICa9YF1zozpriPM44A7SdP9tTSABbQEubFOnszPZvRqFYw5UKlJ4-VQlrKydIPjSrYzgSIvd1-jSxhA2uQDI_afb4ku8FxFdVtk0yopMRGLzlg7AR_JHMvqPEKCCJlVEv6N2lJQ3hL0D-4SlLuSys9N_Pc20TKt-jrMi04rcB_ipD-hmzzVtFD9XEWgYehMBMPG4cyIl3JaOnibUMdWGxSgiBzxoCD_1rybhazIveZ96PwpfGJknoEVucyzyht1s0j3QWWAuBBV4K5XlyLHW48xAEWIH8aSWiy2AqqFyZvZRoHYhmVb5HQHsdXziMrIR9r-gfl4DwFtb5bzC7bDM_oeJCF_IuhPbC3Eu1rJ6g78K8J01oKbmReHZdvcFbsv9z6MxJx3U5ztGZFiH68UFq_p1RHaUAe1R1DhDmYPZjht39C5nWBWwzHoRVIJLgWPE3Pa5m2tW5yjegruww8C7mVMZsqmCiO4lt1k4ryC0BOO-wjy_-_7oZRrpRRkWTrRFB9tqohiqJBxwF9HMiwxh0Y59HXvWikfKNEzQGqxadayR64KCRJamjJ60AkM50r0UhOrZXy48ouWdjJ3vT1djCoKlmDkb8lIByf4v-TkB1rJqePSDzlwIHvUJmkNH0_qSHhJpf0CGOuen_l8xvj0eypXsk9olB-QEssf3RabDGMGuDw89_bxmhro-P7UmkIaMzqjCVJVr-lTxjqHiEn6kEpeaqKbHo_b55KGIQimStFZQJBKOwzrA-0O4eJ7w2ktnHcm1O2L98vvO79HYut78Q643fdi5yr7psFGlHjWdtUi8dhIxN9fkIgBMLZBIIrSlPc0VDKCIcqnddSuDiMX7BN7WZTJrPY9G8ixjojJgfyItH2PlBUz1MP66IMHlgllrRrwMito0QM8mQG3oD7DrDCTj9VfmMIIJu3Yx3GZpzJIq_-UfM_nC-5iEp96fG7uUCgdZvOFzJtXJ1JvNcSUM2dJOZN7rTyOt3XceeY'; // Remplacez par votre jeton Dropbox
-            const url = 'https://content.dropboxapi.com/2/files/upload';
-
-            const dropboxArgs = {
-                path: `/backup_video.webm`, // Doit commencer par "/"
-                mode: 'add',
-                autorename: true,
-                mute: false
-            };
-
-            const headers = {
-                'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                'Content-Type': 'application/octet-stream',
-                'Dropbox-API-Arg': JSON.stringify(dropboxArgs) // Format correct
-            };
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: headers,
-                    body: blob
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("Fichier vidéo téléchargé avec succès :", data);
-                    alert("Vidéo envoyée avec succès !");
-                } else {
-                    const errorData = await response.json();
-                    console.error("Échec de l'upload de la vidéo", errorData);
-                    alert('Une erreur est survenue lors du téléchargement de la vidéo.');
-                }
-            } catch (error) {
-                console.error("Erreur lors de l'upload de la vidéo :", error);
-                alert('Une erreur est survenue lors du téléchargement de la vidéo.');
-            }
+            const blob = new Blob(chunks, { type: 'video/webm' });
+            const fileName = `ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`;
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert("Vidéo sauvegardée avec succès dans ToxDetect Backup !");
         }
 
         function closeVideo() {
