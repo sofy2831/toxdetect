@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedContacts.forEach(contact => {
                 const contactBadge = document.createElement("span");
                 contactBadge.classList.add("contact-badge");
-                contactBadge.innerText = contact + " ✖";
+                contactBadge.innerHTML = contact + ' <button class="remove-btn">🗑</button>';
                 contactBadge.style.cursor = "pointer";
                 contactBadge.onclick = function () {
                     removeContact(contact);
