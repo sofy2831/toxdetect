@@ -116,15 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function extractAccessToken() {
-    console.log("Access Token extrait:", accessToken);
     const params = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = params.get("access_token");
+    const token = params.get("access_token");
 
-    if (accessToken) {
-        localStorage.setItem("dropboxToken", accessToken);
+    if (token) {
+        localStorage.setItem("dropboxToken", token);
+        console.log("Token enregistré :", token);
         alert("Connexion Dropbox réussie !");
         window.location.href = "journal.html";
+    } else {
+        console.error("Échec de la récupération du token d'accès.");
     }
 }
+
 
 window.onload = extractAccessToken;
