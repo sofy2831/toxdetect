@@ -121,5 +121,71 @@
 
     <script src="urgences.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
+    
+    function getLocation(callback) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
+                },
+                function (error) {
+                    let errorMessage = "Localisation non disponible";
+                    if (error.code === 1) {
+                        errorMessage = "Accès à la localisation refusé";
+                    } else if (error.code === 2) {
+                        errorMessage = "Impossible de récupérer la position";
+                    } else if (error.code === 3) {
+                        errorMessage = "Délai d'attente dépassé";
+                    }
+                    callback(errorMessage);
+                }
+            );
+        } else {
+            callback("Localisation non disponible");
+        }
+    }
+
+    window.sendAlert = function () {
+        let message = document.getElementById("predefinedMessage").value;
+        if (message === "other") {
+            message = document.getElementById("customMessage").value;
+        }
+        
+        if (selectedContacts.length === 0) {
+            alert("❌ Veuillez sélectionner au moins un contact.");
+            return;
+        }
+        
+        if (!message.trim()) {
+            alert("❌ Veuillez écrire un message.");
+            return;
+        }
+        
+        if (!confirm("⚠ Voulez-vous vraiment envoyer cette alerte ?")) {
+            return;
+        }
+
+        getLocation(function (location) {
+            const fullMessage = `${message}\n${location}`;
+            alert("✅ Alerte envoyée à : " + selectedContacts.join(", ") + "\n📩 Message : " + fullMessage);
+        });
+    };
+
+    window.sendEmergency = function () {
+        getLocation(function (location) {
+            const emergencyMessage = "🚨 URGENCE ! J'ai besoin d'aide immédiatement !\n" + location;
+            alert("🚑 Urgence envoyée aux autorités !\n" + emergencyMessage);
+        });
+    };
+});
+</script>
+
+
+    
 </body>
 </html>
