@@ -88,6 +88,26 @@ function sendAlert() {
     }
 }
 
+// ✅ Fonction pour envoyer l'alerte d'urgence avec localisation GPS
 function sendEmergency() {
-    alert("Appel des services d'urgence en cours...");
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+
+                let emergencyMessage = `🚨 Urgence ! Appel des services d'urgence en cours...\n\n📍 Localisation : https://www.google.com/maps?q=${latitude},${longitude}`;
+                
+                alert(emergencyMessage); // Affiche un message d'urgence avec la localisation
+                console.log(emergencyMessage); // Log pour test
+
+                // Ici, possibilité d'ajouter un appel direct aux urgences (ex : via `tel:` dans un lien).
+            },
+            function (error) {
+                alert("Erreur lors de la récupération de la localisation : " + error.message);
+            }
+        );
+    } else {
+        alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+    }
 }
