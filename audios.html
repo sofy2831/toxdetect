@@ -140,7 +140,7 @@
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
                 'Content-Type': 'application/octet-stream',
                 'Dropbox-API-Arg': JSON.stringify({
-                    path: `/Applications/ToxDetect backup/${fileName}`, // Sauvegarde dans un dossier "backup"
+                    path: `/ToxDetect backup/${fileName}`, // Sauvegarde dans un dossier "backup"
                     mode: 'add',
                     autorename: true,
                     mute: false
