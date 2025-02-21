@@ -21,13 +21,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getDropboxClient() {
-        if (!accessToken) {
-            alert("Vous devez être connecté à Dropbox !");
-            return null;
-        }
-        return new Dropbox.Dropbox({ accessToken });
+         let accessToken = localStorage.getItem("dropboxToken");
+    console.log("Token utilisé pour Dropbox:", accessToken);
+    
+    if (!accessToken) {
+        alert("Vous devez être connecté à Dropbox !");
+        return null;
     }
 
+        try {
+        return new Dropbox.Dropbox({ accessToken });
+    } catch (error) {
+        console.error("Erreur lors de la création du client Dropbox :", error);
+        return null;
+    }
+}
     function saveJournalToDropbox(noteTexte) {
        console.log("Envoi du journal à Dropbox :", noteTexte);
         const dbx = getDropboxClient();
