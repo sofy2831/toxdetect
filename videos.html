@@ -100,7 +100,9 @@
 
         function saveVideo() {
             const blob = new Blob(chunks, { type: 'video/webm' });
-            const fileName = `/Applications/ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`;
+            const fileName = `ToxDetect_Backup_${new Date().toISOString().replace(/:/g, '-')}.webm`;
+            const savePath = `/ToxDetect backup/${fileName}`;
+            
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = fileName;
