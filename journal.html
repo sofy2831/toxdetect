@@ -95,8 +95,7 @@
             const statusElement = document.getElementById("dropbox-status");
             const logoutButton = document.getElementById("logout-button");
             const dropboxButton = document.getElementById("ma-dropbox-btn");
-            const consultButton = document.getElementById("consult-dropbox-btn");
-
+           
             if (token) {
                 statusElement.innerHTML = "✅ Connecté à Dropbox";
                 logoutButton.style.display = "block";
@@ -156,15 +155,13 @@
     <!-- Boutons Vidéo et Audio avec icônes -->
     <div class="media-container">
         <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='video.html'">
-                <img src="video-icon.png" alt="Vidéo" style="width: 30px; vertical-align: middle; margin-right: 10px;">
+            <button class="media-btn" onclick="window.location.href='videos.html'">
                 Vidéo
             </button>
         </div>
         <div class="media-section">
-            <button class="media-btn" onclick="window.location.href='audio.html'">
-                <img src="audio-icon.png" alt="Audio" style="width: 30px; vertical-align: middle; margin-right: 10px;">
-                Audio
+            <button class="media-btn" onclick="window.location.href='audios.html'">
+                 Audio
             </button>
         </div>
     </div>
