@@ -3,189 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urgences</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 400px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-        }
-        select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        button {
-            padding: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            transition: 0.3s ease-in-out;
-        }
-        .blue-button {
-            background-color: #007BFF;
-            color: white;
-        }
-        .blue-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-        .red-button {
-            background-color: #FF0000;
-            color: white;
-        }
-        .red-button:hover {
-            background-color: #CC0000;
-            transform: scale(1.05);
-        }
-        .selected-contacts {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        .contact-badge {
-            background: #007BFF;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .contact-badge span {
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
+    <title>Alerte Urgence</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h1>Application d'Urgence</h1>
 
-    <div class="container">
-        <h2>Contact</h2>
-        <label for="contacts">Sélectionnez un contact :</label>
-        <select id="contacts" onchange="addContact()">
-            <option value="">--Choisir--</option>
-            <option value="+33612345678">Contact 1</option>
-            <option value="+33687654321">Contact 2</option>
-            <option value="+33611223344">Contact 3</option>
-        </select>
-        <div class="selected-contacts" id="selectedContacts"></div>
+    <label for="contacts">Sélectionnez un contact :</label>
+    <select id="contacts">
+        <option value="">-- Choisissez --</option>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Charlie">Charlie</option>
+    </select>
+    <button onclick="addContact()">Ajouter</button>
 
-        <label for="predefinedMessage">Message pré-enregistré :</label>
-        <select id="predefinedMessage" onchange="checkOtherOption()">
-            <option value="Je suis à la maison, il devient violent. Je ne peux pas partir. J'ai besoin d'aide.">
-                Je suis à la maison, il devient violent. Je ne peux pas partir. J'ai besoin d'aide.
-            </option>
-            <option value="Je suis en danger, il a pris mon téléphone, je suis seule, j'ai peur.">
-                Je suis en danger, il a pris mon téléphone, je suis seule, j'ai peur.
-            </option>
-            <option value="Je me sens menacé(e), aidez-moi">Je me sens menacé(e), aidez-moi</option>
-            <option value="other">Autre</option>
-        </select>
-        <textarea id="customMessage" style="display:none;" placeholder="Écrivez votre message ici..."></textarea>
+    <h3>Contacts sélectionnés :</h3>
+    <div id="selectedContacts">Aucun contact sélectionné.</div>
 
-        <div class="button-container">
-            <button class="blue-button" onclick="sendAlert()">Alerte</button>
-            <button class="red-button" onclick="sendEmergency()">Urgences</button>
-            <button class="blue-button" onclick="window.location.href='index.html';">Retour à l'accueil</button>
-        </div>
-    </div>
+    <h3>Choisissez un message :</h3>
+    <select id="predefinedMessage" onchange="checkOtherOption()">
+        <option value="Je suis en danger, contactez-moi !">Je suis en danger, contactez-moi !</option>
+        <option value="Appelez la police immédiatement !">Appelez la police immédiatement !</option>
+        <option value="other">Autre...</option>
+    </select>
+    <textarea id="customMessage" placeholder="Écrivez votre message..." style="display: none;"></textarea>
+
+    <h3>Message sélectionné :</h3>
+    <div id="selectedMessage"></div>
+
+    <button onclick="sendAlert()">Envoyer Alerte</button>
+    <button onclick="sendEmergency()">Envoyer Urgence 🚨</button>
 
     <script src="urgences.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    let selectedContacts = JSON.parse(localStorage.getItem("selectedContacts")) || [];
-    
-    function getLocation(callback) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    callback(`Localisation : https://www.google.com/maps?q=${latitude},${longitude}`);
-                },
-                function (error) {
-                    let errorMessage = "Localisation non disponible";
-                    if (error.code === 1) {
-                        errorMessage = "Accès à la localisation refusé";
-                    } else if (error.code === 2) {
-                        errorMessage = "Impossible de récupérer la position";
-                    } else if (error.code === 3) {
-                        errorMessage = "Délai d'attente dépassé";
-                    }
-                    callback(errorMessage);
-                }
-            );
-        } else {
-            callback("Localisation non disponible");
-        }
-    }
-
-    window.sendAlert = function () {
-        let message = document.getElementById("predefinedMessage").value;
-        if (message === "other") {
-            message = document.getElementById("customMessage").value;
-        }
-        
-        if (selectedContacts.length === 0) {
-            alert("❌ Veuillez sélectionner au moins un contact.");
-            return;
-        }
-        
-        if (!message.trim()) {
-            alert("❌ Veuillez écrire un message.");
-            return;
-        }
-        
-        if (!confirm("⚠ Voulez-vous vraiment envoyer cette alerte ?")) {
-            return;
-        }
-
-        getLocation(function (location) {
-            const fullMessage = `${message}\n${location}`;
-            alert("✅ Alerte envoyée à : " + selectedContacts.join(", ") + "\n📩 Message : " + fullMessage);
-        });
-    };
-
-    window.sendEmergency = function () {
-        getLocation(function (location) {
-            const emergencyMessage = "🚨 URGENCE ! J'ai besoin d'aide immédiatement !\n" + location;
-            alert("🚑 Urgence envoyée aux autorités !\n" + emergencyMessage);
-        });
-    };
-});
-</script>
-
-
-    
 </body>
 </html>
