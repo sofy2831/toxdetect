@@ -94,12 +94,14 @@
         <div class="section">
             <label for="predefinedMessage">Message pré-enregistré :</label>
             <select id="predefinedMessage" onchange="updateSelectedMessage()">
-                <div id="selectedMessage"></div>
                 <option value="J’ai besoin d’aide, prévenir les autorités.">J’ai besoin d’aide, prévenir les autorités.</option>
                 <option value="Je suis en danger, j’ai besoin d’aide immédiatement.">Je suis en danger, j’ai besoin d’aide immédiatement.</option>
                 <option value="Je me sens menacé(e), aidez-moi">Je me sens menacé(e), aidez-moi</option>
                 <option value="other">Autre</option>
             </select>
+
+            <div id="selectedMessage"></div>
+
             <textarea id="customMessage" style="display:none;" placeholder="Écrivez votre message ici..."></textarea>
             <div id="selectedMessage"></div>
         </div>
