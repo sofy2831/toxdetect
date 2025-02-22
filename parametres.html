@@ -20,7 +20,7 @@
     }
 
     .container {
-      max-width: 400px; /* Largeur maximale pour mobile */
+      max-width: 400px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -31,6 +31,7 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
       padding: 15px;
+      text-align: center;
     }
 
     .section h2 {
@@ -38,21 +39,27 @@
       margin-bottom: 10px;
     }
 
-    .button, .link {
+    .button, .link, .back-btn {
       display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 10px;
       text-align: center;
       font-size: 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .button {
       background-color: #28a745;
       color: white;
-      text-decoration: none;
-      border-radius: 5px;
     }
 
     .link {
       background-color: #007BFF;
+      color: white;
     }
 
     .button:hover, .link:hover {
@@ -61,17 +68,8 @@
 
     /* Bouton retour bleu */
     .back-btn {
-      display: block;
-      width: 100%;
-      text-align: center;
       background-color: #007BFF;
       color: white;
-      font-size: 16px;
-      padding: 12px;
-      border-radius: 5px;
-      text-decoration: none;
-      margin-top: 20px;
-      font-weight: bold;
     }
 
     .back-btn:hover {
