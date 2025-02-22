@@ -43,13 +43,16 @@ body {
             margin-top: 30px; 
         }
         .contact-badge {
-            display: block;
-            margin-bottom: 2px;
-           padding: 2px 4px; /* Moins d'espace interne */
-            background-color: #f1f1f1;
-            border-radius: 3px;
-            font-size: 16px; /* Ajoute cette ligne et ajuste la taille selon tes besoins */
-        }
+    display: inline-block; /* Permet un encadré plus compact */
+    margin-bottom: 2px;
+    padding: 2px 6px; /* Réduction du padding */
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    font-size: 16px;
+    border: 1px solid #ccc; /* Ajoute une légère bordure */
+    line-height: 1.2; /* Réduit l'espacement vertical */
+}
+
             #selectedMessage {
             margin-top: 15px; /* Augmente l'écart */
             font-weight: bold; /* Pour le rendre plus visible */
