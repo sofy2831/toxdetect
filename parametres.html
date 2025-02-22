@@ -20,6 +20,8 @@
     }
 
     .container {
+      max-width: 400px; /* Largeur maximale pour mobile */
+      margin: 0 auto;
       padding: 20px;
     }
 
@@ -39,9 +41,10 @@
     .button, .link {
       display: block;
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       text-align: center;
+      font-size: 16px;
       background-color: #28a745;
       color: white;
       text-decoration: none;
@@ -56,18 +59,23 @@
       opacity: 0.9;
     }
 
+    /* Bouton retour bleu */
     .back-btn {
-      display: inline-block;
-      background-color: #6c757d;
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: #007BFF;
       color: white;
-      padding: 10px 15px;
+      font-size: 16px;
+      padding: 12px;
       border-radius: 5px;
       text-decoration: none;
       margin-top: 20px;
+      font-weight: bold;
     }
 
     .back-btn:hover {
-      opacity: 0.8;
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -99,7 +107,7 @@
       <a href="#" class="link">Voir la FAQ</a>
     </div>
 
-    <!-- Bouton Retour -->
+    <!-- Bouton Retour à l'accueil -->
     <a href="index.html" class="back-btn">Retour à l'accueil</a>
   </div>
 </body>
