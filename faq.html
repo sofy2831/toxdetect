@@ -35,6 +35,9 @@
     }
     .faq-item p {
       display: none;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
     }
     .back-btn {
       display: inline-block;
@@ -52,11 +55,7 @@
   <script>
     function toggleAnswer(id) {
       var answer = document.getElementById(id);
-      if (answer.style.display === "none") {
-        answer.style.display = "block";
-      } else {
-        answer.style.display = "none";
-      }
+      answer.style.display = (answer.style.display === "none" || answer.style.display === "") ? "block" : "none";
     }
   </script>
 </head>
@@ -71,13 +70,13 @@
     </div>
     <div class="faq-item">
       <h3 onclick="toggleAnswer('q2')">Quels sont les moyens de paiement acceptés ?</h3>
-      <p id="q2">Nous acceptons les paiements via PayPal et cartes bancaires.</p>
+      <p id="q2">Nous acceptons les paiements via PayPal.</p>
     </div>
     <div class="faq-item">
       <h3 onclick="toggleAnswer('q3')">Comment contacter le support client ?</h3>
-      <p id="q3">Vous pouvez nous contacter via la section "Aide" de l'application ou par email à support@example.com.</p>
+      <p id="q3">Vous pouvez nous contacter par email à <a href="mailto:toxdetect@gmail.com">toxdetect@gmail.com</a>.</p>
     </div>
-    <a href="parametres.html" class="back-btn">Retour à l'accueil</a>
+    <a href="parametres.html" class="back-btn">Retour aux paramètres</a>
   </div>
 </body>
 </html>
