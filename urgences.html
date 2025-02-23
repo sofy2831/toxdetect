@@ -37,7 +37,7 @@
             font-size: 16px;
         }
         textarea {
-            height: 80px;
+            height: 100px;
             resize: none; /* Empêche le redimensionnement */
         }
         button {
@@ -73,25 +73,28 @@
             min-height: 30px;
         }
         .message-alert {
-            margin-top: 5px;
+            margin-top: 10px;
             padding: 10px;
             background-color: #e9f7ff;
             border: 1px solid #b8d8f2;
             color: #333;
             border-radius: 5px;
-         }
+        }
         #customMessage {
             width: 80%;            /* Largeur du champ de texte (80% de la page) */
             max-width: 300px;      /* Largeur maximale pour éviter qu'il ne prenne trop de place */
-            min-height: 50px;     /* Hauteur minimale pour permettre à l'utilisateur de voir plus de texte */
+            min-height: 50px;      /* Hauteur minimale pour permettre à l'utilisateur de voir plus de texte */
             height: auto;          /* La hauteur s'adapte au contenu */
             padding: 10px;         /* Un peu de padding pour un confort d'écriture */
             border: 1px solid #ccc; /* Bordure discrète */
             border-radius: 5px;    /* Coins arrondis pour l'apparence */
             resize: vertical;      /* L'utilisateur peut redimensionner verticalement, mais pas horizontalement */
         }
-
-        
+        .alert-message {
+            font-size: 16px;
+            margin-top: 20px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -100,6 +103,7 @@
         <h1>Urgence : Alertez immédiatement</h1>
 
         <div class="section">
+            <p class="alert-message">⚠️ Votre sécurité est primordiale. En appuyant sur ALERTE, vos proches seront immédiatement informés, ou avec URGENCE, les secours seront avertis. Restez calme et agissez rapidement.</p>
             
             <label for="contacts">Sélectionnez un contact :</label>
             <select id="contacts" onchange="addContact()">
@@ -122,7 +126,6 @@
         </div>
 
         <div class="button-container">
-             </p>⚠️ Votre sécurité est primordiale. En appuyant sur ALERTE, vos proches seront immédiatement informés, ou avec URGENCE, les secours seront avertis. Restez calme et agissez rapidement.</p>
             <button class="blue-button" onclick="sendAlert()">Alerte</button>
             <button class="red-button" onclick="sendEmergency()">Urgences</button>
             <button class="blue-button" onclick="window.location.href='index.html';">Retour à l'accueil</button>
