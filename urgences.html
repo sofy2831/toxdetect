@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urgences</title>
+    <title>Urgence : Alertez immédiatement</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,8 +26,7 @@
         .section {
             margin-bottom: 20px;
             padding: 20px;
-            background-color: #f1f1f1;
-            border-radius: 8px;
+            background-color: #ffffff;
         }
         select, textarea {
             width: 100%;
@@ -36,6 +35,10 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 16px;
+        }
+        textarea {
+            height: 80px;
+            resize: none; /* Empêche le redimensionnement */
         }
         button {
             margin-top: 20px;
@@ -85,7 +88,7 @@
         <h1>Urgence : Alertez immédiatement</h1>
 
         <div class="section">
-            
+            <h2>Contact</h2>
             <label for="contacts">Sélectionnez un contact :</label>
             <select id="contacts" onchange="addContact()">
                 <option value="">--Choisir--</option>
@@ -107,7 +110,6 @@
         </div>
 
         <div class="button-container">
-            <p id="message">ℹ️ Parce que chaque seconde compte. Vos proches seront avertis avec ALERTE, ou les secours avec URGENCE , ne paniquez pas et appuyez sur le bouton.</p>
             <button class="blue-button" onclick="sendAlert()">Alerte</button>
             <button class="red-button" onclick="sendEmergency()">Urgences</button>
             <button class="blue-button" onclick="window.location.href='index.html';">Retour à l'accueil</button>
