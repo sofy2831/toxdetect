@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -63,6 +64,7 @@ button:focus {
 .result-message.faible {
     color: green;
 }
+
 #result {
     margin-top: 20px;
     font-weight: bold;
@@ -83,63 +85,55 @@ button#return-home {
 button#return-home:hover {
     background-color: #218838; /* Vert foncé au survol */
 }
+
 .container {
     display: flex;
     flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
     justify-content: space-between;
     align-items: flex-start;
-    flex-direction: 1;
     max-width: 1000px; /* Limite la largeur de la page */
-    margin: 10 auto; /* Centre la page */
-    
+    margin: 10px auto; /* Centre la page */
 }
-forced-colors-adjust auto
-    /* Styles pour le mode contraste forcé */
+
+/* Mode contraste forcé */
+@media (forced-colors: active) {
     body {
         background-color: black; /* Par exemple, fond noir */
         color: white; /* Texte en blanc */
     }
 
     /* Autres éléments spécifiques du site qui doivent être visibles en mode contraste élevé */
-
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
-    
     header {
         background-color: #333;
         color: white;
         padding: 10px;
         text-align: center;
     }
-    
+
     h1, h2 {
         font-size: 1.5rem;
         color: #333;
     }
-    
+
     table {
         width: 100%;
         border-collapse: collapse;
     }
-    
+
     table, th, td {
         border: 1px solid #ddd;
     }
-    
+
     th, td {
         padding: 10px;
         text-align: left;
     }
-    
+
     ul {
         list-style: none;
         padding: 0;
     }
-    
+
     button {
         background-color: #4CAF50;
         color: white;
@@ -147,27 +141,29 @@ forced-colors-adjust auto
         border: none;
         cursor: pointer;
     }
-    
+
     button:hover {
         background-color: #45a049;
     }
+
     #generate {
         margin-bottom: 20px; /* Ajoute un espacement sous le bouton "Générer un fichier Word" */
     }
-    
+
     #close-section {
         margin-top: 20px; /* Ajoute un espacement au-dessus du bouton "Fermer" */
     }
+
     .button-container {
         display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
     }
-    
+
     button {
         margin: 0; /* Supprimer l'espacement par défaut des boutons */
         padding: 10px 20px;
@@ -176,22 +172,22 @@ forced-colors-adjust auto
         border: none;
         border-radius: 5px;
     }
-    
+
     .blue-button {
         background-color: #007BFF;
         color: white;
     }
-    
+
     .blue-button:hover {
         background-color: #0056b3;
     }
-    
+
     .red-button {
         background-color: #FF0000;
         color: white;
     }
-    
+
     .red-button:hover {
         background-color: #CC0000;
     }
-    
+}
