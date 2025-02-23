@@ -79,7 +79,19 @@
             border: 1px solid #b8d8f2;
             color: #333;
             border-radius: 5px;
+         }
+        #customMessage {
+            width: 80%;            /* Largeur du champ de texte (80% de la page) */
+            max-width: 600px;      /* Largeur maximale pour éviter qu'il ne prenne trop de place */
+            min-height: 150px;     /* Hauteur minimale pour permettre à l'utilisateur de voir plus de texte */
+            height: auto;          /* La hauteur s'adapte au contenu */
+            padding: 10px;         /* Un peu de padding pour un confort d'écriture */
+            border: 1px solid #ccc; /* Bordure discrète */
+            border-radius: 5px;    /* Coins arrondis pour l'apparence */
+            resize: vertical;      /* L'utilisateur peut redimensionner verticalement, mais pas horizontalement */
         }
+
+        
     </style>
 </head>
 <body>
