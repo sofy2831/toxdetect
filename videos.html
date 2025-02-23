@@ -101,8 +101,8 @@
 
         function saveVideo() {
             const blob = new Blob(chunks, { type: 'video/webm' });
-            const fileName = `video_urgence_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
-            const savePath = `/ToxDetect backup/${fileName}`; // Chemin Dropbox
+            const fileName = video_urgence_${new Date().toISOString().replace(/:/g, '-')}.webm; 
+            const savePath = /ToxDetect backup/${fileName}; // Chemin Dropbox
 
             // 1️⃣ Télécharger localement
             const a = document.createElement('a');
@@ -116,39 +116,31 @@
             uploadToDropbox(blob, savePath);
         }
 
-        async function uploadVideoToDropbox(blob, fileName) {
-            const ACCESS_TOKEN = 'sl.u.AFjhMwVXxIjR02uhSdFmIQQc1STd87s0w7sQbjcsomrR43Ekfl5fpoV3flo6PxxnG1mw_YdG1m39pSddYU9g1uA0M_89nbx1hEc2z1BDO6Mu64AL7S6HDnxSzF8u2s9UDIcYlbAkZGjaGMSrRTpVKHkJHCsV395PbEWXJwyjV5u094tYGRR5JHPyclj0sVUI0Qkb-7qEHMVTxVUdUUndJDj-NsVsTb9d_PJk7j9teFuGBbp9txGoG4UNXWai_9SigayyKSSu4lUC05YksIsgKqMcGKvNXCvfzPXnUPDAqv2kZ5E7OjTfiiHZzchklTgJuRwLCJi56AtJRr4kWYNC7lkiTpG1cSP0Zfw7e00If3sofZsULX05suLh3wPDXPGBN_VXkf74m3UZprLJ2XBsO1E7npEfc6GabRenVrx9cYtWHMI_GbX85gcMgfperN2YKTzaoYVsjB8TMp9U6FCGCxXwtCijXSs36TBeaS8rkW-lLl-voh6D4AG62LL1hU15wQukXT19yQ9zoXJv2EBkCyQ6JM5jDtPB_7qdphHI8yAfmO73kF-0uybr0kETU-j257x43XWx6yu32nnX1VCL2hfs6SeR4vO_7OgKaYF1hJdzimsI9dbeOLcReZ1_NzBbXfbW-dVwCWSp5XDJC1aZ0X3AIHMw2erAFRr4DfTCw-PNn20ByFpzNDSX2j_J2eoJN20BWwYvn_qcIbZd4kIXq9F0IdED-nmXE3XXbYM8_FPtPx_6UJNfKlySG8_eqcWAaLYG5dYffpRUHZOYhdzdHqNQptZc70ozoQkwa550c_T3Rb1vHwSKzjGz0vGpVuWVSKGUxdpwwX3J2wwg25-BuZIdLtrhdst__NnDPzWY0UVUWRzz_X5AK21XkEilHMmG7w5l6StkIMNtZ_xxDRg3aGjiMQprLd_NizItegtZ1sc4vwahEXngGYPTWFhKs87c7naTFPecJphClWuHifr1PEopYeV8JSgVo_50y8bY52dqV3dKDleteaJnJtAlUEzSHF8z-4MLpbh4E_6NlN35FJFWFsiOOyKeVMOLIN0i3hD_b71FwrnP71-5krtpTPzb_0yTg08sgMvUPcfCDtzhwyOO7jm0WVepoNFcwlRzgWPqIwc47l39Gm365WvORQ3luXvG1IQFmVyYWr-kG7pvbEia1OVYbjT54-MvThI5OJmSAL4oqGMWr0fwVkFIWaovcCsh8nQgOyek6w8VvRoIkUzrTz8GDiPQ7EiWiWRJSTHFcnwLRdFK3Ow7aDCCUx52Vwg'; // ⚠️ À sécuriser côté serveur !
-
-        const url = 'https://content.dropboxapi.com/2/files/upload';
-           
+        function uploadToDropbox(blob, savePath) {
+            fetch('https://content.dropboxapi.com/2/files/upload', {
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                    'Authorization': Bearer ${ACCESS_TOKEN},
                     'Content-Type': 'application/octet-stream',
                     'Dropbox-API-Arg': JSON.stringify({
-                     path: `/ToxDetect backup/${fileName}`, // Sauvegarde dans un dossier "backup"
-                    mode: 'add',
+                        path: savePath,
+                        mode: 'add',
                         autorename: true,
                         mute: false
                     })
                 },
-                try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: blob
-        });
-            if (response.ok) {
-            alert(`Vidéo enregistrée sous "${fileName}" dans votre Dropbox !`);
-        } else {
-            const errorText = await response.text();
-            console.error("Erreur Dropbox :", errorText);
-            alert('Erreur lors de l’enregistrement de la vidéo.');
+                body: blob
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Upload réussi :", data);
+                alert("Vidéo sauvegardée sur Dropbox !");
+            })
+            .catch(error => {
+                console.error("Erreur lors de l'upload Dropbox :", error);
+                alert("Erreur lors de l'envoi vers Dropbox.");
+            });
         }
-    } catch (error) {
-        console.error("Erreur de connexion à Dropbox :", error);
-        alert('Erreur lors de l’accès à Dropbox.');
-    }
-}
 
         function closeVideo() {
             window.location.href = 'journal.html'; // Redirige vers la page journal.html
