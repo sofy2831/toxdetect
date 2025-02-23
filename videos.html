@@ -97,7 +97,6 @@
                 mediaRecorder.resume();
                 document.getElementById('pauseResumeBtn').textContent = 'Pause';
             }
-        }
 
         function saveVideo() {
             const blob = new Blob(chunks, { type: 'video/webm' });
@@ -132,9 +131,7 @@ async function saveVideo() {
     // 2️⃣ Envoyer sur Dropbox si la taille est correcte
     uploadToDropbox(blob, savePath);
 }
-       
-
-           
+               
         function uploadToDropbox(blob, savePath) {
             fetch('https://content.dropboxapi.com/2/files/upload', {
                 method: 'POST',
@@ -160,8 +157,6 @@ async function saveVideo() {
                 alert("Erreur lors de l'envoi vers Dropbox.");
             });
         }
-
- 
             
         function closeVideo() {
             window.location.href = 'journal.html'; // Redirige vers la page journal.html
