@@ -161,6 +161,16 @@ async function saveVideo() {
             });
         }
 
+ const data = await response.json();
+    if (data.url) {
+        console.log("Lien de partage généré pour la vidéo : " + data.url);
+        alert("Voici le lien de partage : " + data.url);
+    } else {
+        console.error("Erreur lors de la génération du lien de partage", data);
+        alert("Erreur lors de la génération du lien de partage");
+    }
+}
+            
         function closeVideo() {
             window.location.href = 'journal.html'; // Redirige vers la page journal.html
         }
