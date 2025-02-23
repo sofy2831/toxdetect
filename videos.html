@@ -104,18 +104,37 @@
             const fileName = `video_urgence_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
             const savePath = `/ToxDetect backup/${fileName}`; // Chemin Dropbox
 
-            // 1️⃣ Télécharger localement
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            // 2️⃣ Envoyer sur Dropbox
-            uploadToDropbox(blob, savePath);
-        }
+async function saveVideo() {
+    const blob = new Blob(chunks, { type: 'video/webm' });
 
+    // Vérifier la taille du fichier (en octets)
+    const fileSize = blob.size;  // Taille en octets
+
+    // Limite de taille de fichier (350 Mo = 350 * 1024 * 1024 octets)
+    const maxFileSize = 350 * 1024 * 1024; // 350 Mo en octets
+
+    if (fileSize > maxFileSize) {
+        alert("Le fichier vidéo est trop gros. Veuillez réduire la taille de la vidéo.");
+        return;
+    }
+
+    const fileName = `video_urgence_${new Date().toISOString().replace(/:/g, '-')}.webm`; 
+    const savePath = `/ToxDetect backup/${fileName}`; // Chemin Dropbox
+
+    // 1️⃣ Télécharger localement
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // 2️⃣ Envoyer sur Dropbox si la taille est correcte
+    uploadToDropbox(blob, savePath);
+}
+       
+
+           
         function uploadToDropbox(blob, savePath) {
             fetch('https://content.dropboxapi.com/2/files/upload', {
                 method: 'POST',
